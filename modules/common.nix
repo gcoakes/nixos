@@ -1,21 +1,4 @@
 { config, lib, pkgs, ... }: {
-    # Enable sound.
-    sound.enable = true;
-    hardware.pulseaudio.enable = true;
-
-    # Enable the X11 windowing system.
-    services.xserver = {
-        enable = true;
-        layout = "us";
-        desktopManager = {
-            default = "xfce";
-            xterm.enable = false;
-            xfce.enable = true;
-        };
-        displayManager.lightdm.enable = true;
-        videoDrivers = [ "amd" ];
-    };
-
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.gcoakes = {
         createHome = true;

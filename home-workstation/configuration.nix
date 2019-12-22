@@ -6,6 +6,7 @@
     imports = [
         # Include the results of the hardware scan.
         ./hardware-configuration.nix
+        ./modules/graphical.nix
         ./modules/common.nix
     ];
 
