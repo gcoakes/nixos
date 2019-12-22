@@ -7,12 +7,11 @@
     services.xserver = {
         enable = true;
         layout = "us";
-        windowManager = {
-          xmonad.enable = true;
-          xmonad.enableContribAndExtras = true;
-          default = "xmonad";
+        desktopManager = {
+            default = "xfce";
+            xterm.enable = false;
+            xfce.enable = true;
         };
-        desktopManager.default = "none";
         displayManager.lightdm.enable = true;
         videoDrivers = [ "amd" ];
     };
@@ -32,13 +31,10 @@
     # $ nix search wget
     environment = {
         systemPackages = with pkgs; [
-            gnumake
             git
             wget
             htop
-            dmenu
             neovim
-            qutebrowser
         ];
         variables = {
             EDITOR = "nvim";
