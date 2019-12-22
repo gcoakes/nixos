@@ -17,27 +17,34 @@
         extraModulePackages = [ ];
     };
 
-    fileSystems."/" = {
-        device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
-        fsType = "btrfs";
-        options = [ "subvol=@" ];
-    };
+    fileSystems = {
+        "/" = {
+            device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+            fsType = "btrfs";
+            options = [ "compress=lzo,discard,noatime,subvol=@" ];
+        };
 
-    fileSystems."/home" = {
-        device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
-        fsType = "btrfs";
-        options = [ "subvol=@home" ];
-    };
+        "/home" = {
+            device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+            fsType = "btrfs";
+            options = [ "compress=lzo,discard,noatime,subvol=@home" ];
+        };
 
-    fileSystems."/nix" = {
-        device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
-        fsType = "btrfs";
-        options = [ "subvol=@nix" ];
-    };
+        "/nix" = {
+            device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+            fsType = "btrfs";
+            options = [ "compress=lzo,discard,noatime,subvol=@nix" ];
+        };
 
-    fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/CC42-1ECC";
-        fsType = "vfat";
+        "/boot" = {
+            device = "/dev/disk/by-uuid/CC42-1ECC";
+            fsType = "vfat";
+        };
+
+        "/mnt/data" = {
+            device = "/dev/disk/by-uuid/26fb826f-2cc2-4c64-afd4-1245c20f1095";
+            fsType = "ext4";
+        };
     };
 
     swapDevices = [
