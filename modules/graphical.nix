@@ -26,7 +26,13 @@
                 }
             ];
         };
-        displayManager.lightdm.enable = true;
+        displayManager.lightdm = {
+            enable = true;
+            greeters.enso = {
+                enable = true;
+                cursorTheme.package = pkgs.capitaine-cursors;
+            };
+        };
         videoDrivers = [ "amd" ];
     };
 }
