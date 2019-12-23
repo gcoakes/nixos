@@ -13,7 +13,7 @@
             pantheon.enable = true;
             session = [
                 {
-                    name = "home-manager";
+                    name = "Home Manager XSession";
                     start = ''
                         ${pkgs.runtimeShell} $HOME/.hm-xsession &
                         waitPID=$!
