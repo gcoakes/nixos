@@ -7,6 +7,11 @@
     services.xserver = {
         enable = true;
         layout = "us";
+        libinput = {
+            enable = true;
+            accelProfile = "flat";
+            accelSpeed = "0";
+        };
         desktopManager = {
             default = "pantheon";
             xterm.enable = false;
