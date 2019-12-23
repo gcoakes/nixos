@@ -1,4 +1,20 @@
-{ config, lib, pkgs, ... }: {
+let
+    gcoakes-nixhome =
+        if builtins.pathExists ("/home/gcoakes/.config/nixpkgs/home.nix") then (
+            "/home/gcoakes/.config/nixpkgs/home.nix"
+        ) else (
+            builtins.fetchGit {
+              url = https://gitlab.com/gcoakes/nixhome.git;
+              name = "gcoakes-nixhome";
+            } + "/home.nix"
+        );
+    home-manager = builtins.fetchTarball {
+        url = https://github.com/rycee/home-manager/archive/release-19.09.tar.gz;
+    };
+in { config, lib, pkgs, ... }: {
+    imports = [
+        "${home-manager}/nixos"
+    ];
     programs.zsh.enable = true;
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -6,9 +22,10 @@
         shell = pkgs.zsh;
         createHome = true;
         isNormalUser = true;
-        group = "users";
         extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     };
+
+    home-manager.users.gcoakes = import gcoakes-nixhome;
 
     # Set your time zone.
     time.timeZone = "America/Los_Angeles";
