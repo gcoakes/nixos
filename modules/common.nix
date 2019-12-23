@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }: {
+    programs.zsh.enable = true;
+
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.gcoakes = {
+        shell = pkgs.zsh;
         createHome = true;
         isNormalUser = true;
         group = "users";
