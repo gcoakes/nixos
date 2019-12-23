@@ -13,9 +13,7 @@
             accelSpeed = "0";
         };
         desktopManager = {
-            default = "pantheon";
             xterm.enable = false;
-            pantheon.enable = true;
             session = [
                 {
                     name = "home-manager";
