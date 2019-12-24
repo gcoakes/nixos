@@ -43,6 +43,16 @@
       fsType = "vfat";
     };
 
+  fileSystems."/mnt/zshare" =
+    { device = "//fmsnsggss002.amr.corp.intel.com/map";
+      fsType = "cifs";
+      options = let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+
+      in ["${automount_opts},credentials=/etc/nixos/smb-secrets"];
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-partuuid/4be40df6-9a56-0c49-8b62-14ba7516d91b";
         encrypted.label = "nixswap";
