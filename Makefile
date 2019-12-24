@@ -6,3 +6,7 @@ home-workstation:
 work-workstation:
 	ln -f work-workstation/configuration.nix
 	ln -f work-workstation/hardware-configuration.nix
+.PHONY: laptop
+laptop:
+	ln -f laptop/configuration.nix
+	ln -f laptop/hardware-configuration.nix
