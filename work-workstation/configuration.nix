@@ -31,5 +31,8 @@
 
     # Configure sshd
     services.openssh.enable = true;
+
+    # Configure docker.
+    virtualisation.docker.enable = true;
 }
 
