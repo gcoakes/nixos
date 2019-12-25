@@ -31,6 +31,5 @@
                 cursorTheme.package = pkgs.capitaine-cursors;
             };
         };
-        videoDrivers = [ "amd" ];
     };
 }
