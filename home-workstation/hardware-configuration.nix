@@ -51,5 +51,14 @@
         { device = "/dev/disk/by-uuid/df0c60c6-5b1f-46ca-a417-418f4ab1ab72"; }
     ];
 
+    services.xserver.videoDrivers = [ "amdgpu" "radeon" ];
+    hardware = {
+        cpu.amd.updateMicrocode = true;
+        opengl = {
+            enable = true;
+            driSupport32Bit = true;
+        };
+    };
+
     nix.maxJobs = lib.mkDefault 16;
 }
