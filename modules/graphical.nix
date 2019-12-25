@@ -17,6 +17,7 @@
             session = [
                 {
                     name = "home-manager";
+                    bgSupport = true;
                     start = ''
                         ${pkgs.runtimeShell} $HOME/.hm-xsession &
                         waitPID=$!
