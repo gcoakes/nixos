@@ -22,7 +22,7 @@ in { config, lib, pkgs, ... }: {
         shell = pkgs.zsh;
         createHome = true;
         isNormalUser = true;
-        extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+        extraGroups = [ "wheel" "audio" ];
     };
 
     home-manager.users.gcoakes = import gcoakes-nixhome;
