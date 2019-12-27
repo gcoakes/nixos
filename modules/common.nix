@@ -22,7 +22,7 @@ in { config, lib, pkgs, ... }: {
         shell = pkgs.zsh;
         createHome = true;
         isNormalUser = true;
-        extraGroups = [ "wheel" "audio" ];
+        extraGroups = [ "wheel" "audio" "docker" ];
     };
 
     home-manager.users.gcoakes = import gcoakes-nixhome;
