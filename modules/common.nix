@@ -53,4 +53,12 @@ in { config, lib, pkgs, ... }: {
         stateVersion = "19.09";
         autoUpgrade.enable = true;
     };
+
+    # Allow yubikeys to be accessible.
+    services.udev.packages = with pkgs; [
+        yubikey-personalization
+    ];
+
+    # Enable using smart cards.
+    services.pcscd.enable = true;
 }
