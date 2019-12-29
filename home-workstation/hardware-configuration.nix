@@ -51,7 +51,13 @@
         { device = "/dev/disk/by-uuid/df0c60c6-5b1f-46ca-a417-418f4ab1ab72"; }
     ];
 
-    services.xserver.videoDrivers = [ "amdgpu" "radeon" ];
+    services.xserver = {
+      videoDrivers = [ "amdgpu" "radeon" ];
+      xrandrHeads = [
+        { output = "DisplayPort-2"; primary = true; }
+        "HDMI-A-0"
+      ];
+    };
     hardware = {
         cpu.amd.updateMicrocode = true;
         opengl = {
