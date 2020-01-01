@@ -17,7 +17,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "laptop"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.wireless.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -25,6 +25,7 @@
   networking.useDHCP = false;
   networking.interfaces.enp3s0f2.useDHCP = true;
   networking.interfaces.wlp2s0.useDHCP = true;
+  networking.interfaces.enp0s20u1.useDHCP = true;
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
