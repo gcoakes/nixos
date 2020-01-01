@@ -61,4 +61,13 @@ in { config, lib, pkgs, ... }: {
 
     # Enable using smart cards.
     services.pcscd.enable = true;
+
+    # Enable ssh connections from my smart card.
+    services.openssh = {
+      enable = true;
+      passwordAuthentication = false;
+      challengeResponseAuthentication = false;
+      permitRootLogin = "no";
+      ports = [ 2222 ];
+    };
 }
