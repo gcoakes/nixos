@@ -69,5 +69,6 @@ in { config, lib, pkgs, ... }: {
       challengeResponseAuthentication = false;
       permitRootLogin = "no";
       ports = [ 2222 ];
+      authorizedKeysFiles = [ ".config/ssh/authorized_keys" ];
     };
 }
