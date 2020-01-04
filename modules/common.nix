@@ -14,6 +14,7 @@ let
 in { config, lib, pkgs, ... }: {
     imports = [
         "${home-manager}/nixos"
+        ./entertainment.nix
     ];
 
     boot.kernelPackages = pkgs.linuxPackages_latest;

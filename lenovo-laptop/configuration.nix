@@ -23,6 +23,9 @@
   networking.useDHCP = false;
   networking.interfaces.wlp2s0.useDHCP = true;
 
+  nixpkgs.config.allowUnfree = true;
+  entertainment.enable = true;
+
   time.timeZone = "America/Los_Angeles";
 
   system.stateVersion = "19.09";
