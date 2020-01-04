@@ -22,7 +22,7 @@ in { config, lib, pkgs, ... }: {
         shell = pkgs.zsh;
         createHome = true;
         isNormalUser = true;
-        extraGroups = [ "wheel" "audio" "docker" ];
+        extraGroups = [ "wheel" "audio" "docker" "networkmanager" ];
     };
 
     home-manager.users.gcoakes = import gcoakes-nixhome;
@@ -50,7 +50,6 @@ in { config, lib, pkgs, ... }: {
     # servers. You should change this only after NixOS release notes say you
     # should.
     system = {
-        stateVersion = "19.09";
         autoUpgrade.enable = true;
     };
 

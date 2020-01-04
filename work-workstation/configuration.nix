@@ -34,5 +34,7 @@
 
     # Configure docker.
     virtualisation.docker.enable = true;
+
+    system.stateVersion = "19.09";
 }
 

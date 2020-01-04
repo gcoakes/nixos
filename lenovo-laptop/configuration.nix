@@ -2,9 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
-
-{
+{ config, pkgs, ... }: {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -16,19 +14,16 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "laptop"; # Define your hostname.
+  networking.hostName = "laptop";
   networking.networkmanager.enable = true;
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false
-  # here.  Per-interface useDHCP will be mandatory in the future, so this
-  # generated config replicates the default behaviour.
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  # Per-interface useDHCP will be mandatory in the future, so this generated config
+  # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp3s0f2.useDHCP = true;
   networking.interfaces.wlp2s0.useDHCP = true;
-  networking.interfaces.enp0s20u1.useDHCP = true;
 
-  # Set your time zone.
   time.timeZone = "America/Los_Angeles";
 
-  system.stateVersion = "19.09";
+  system.stateVersion = "20.03";
 }

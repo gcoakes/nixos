@@ -10,3 +10,7 @@ work-workstation:
 laptop:
 	ln -f laptop/configuration.nix
 	ln -f laptop/hardware-configuration.nix
+.PHONY: lenovo-laptop
+lenovo-laptop:
+	ln -f lenovo-laptop/configuration.nix
+	ln -f lenovo-laptop/hardware-configuration.nix
