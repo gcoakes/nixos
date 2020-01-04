@@ -13,24 +13,24 @@
 
   boot.initrd.luks.devices = [
     { name = "cryptnix";
-      device = "/dev/disk/by-uuid/e24e48fa-bf01-41ee-85da-081445272e4c";
+      device = "/dev/disk/by-uuid/2cd8df23-2186-4ab8-98ca-91f422e29b5c";
       allowDiscards = true;
     }
   ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/3e2292cb-9d4d-4659-b059-b43e89a2feea";
+    { device = "/dev/disk/by-uuid/dbfbfb2e-c275-4ba8-83d1-f638186b2623";
       fsType = "btrfs";
       options = [ "discard,noatime,compress=lzo,subvol=@nix" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/F63A-8AE9";
+    { device = "/dev/disk/by-uuid/6B23-54B9";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-partuuid/0b066fa6-e35c-da41-8041-a22d4d8ab50d";
+    [ { device = "/dev/disk/by-partuuid/f3e35a68-8f10-410a-8070-11846273c40a";
         encrypted.label = "nixswap";
         randomEncryption.enable = true; }
     ];
