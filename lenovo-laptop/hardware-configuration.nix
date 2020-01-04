@@ -13,19 +13,19 @@
 
   boot.initrd.luks.devices = [
     { name = "cryptnix";
-      device = "/dev/disk/by-uuid/0bfe3f04-3a96-4578-9701-7120722eb6ac";
+      device = "/dev/disk/by-uuid/e24e48fa-bf01-41ee-85da-081445272e4c";
       allowDiscards = true;
     }
   ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/6d3989cb-390b-4a28-8d39-c8d76ca99833";
+    { device = "/dev/disk/by-uuid/3e2292cb-9d4d-4659-b059-b43e89a2feea";
       fsType = "btrfs";
       options = [ "discard,noatime,compress=lzo,subvol=@nix" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/7D98-8773";
+    { device = "/dev/disk/by-uuid/F63A-8AE9";
       fsType = "vfat";
     };
 
