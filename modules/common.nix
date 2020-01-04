@@ -15,6 +15,9 @@ in { config, lib, pkgs, ... }: {
     imports = [
         "${home-manager}/nixos"
     ];
+
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+
     programs.zsh.enable = true;
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
