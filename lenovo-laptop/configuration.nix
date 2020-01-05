@@ -28,5 +28,14 @@
 
   time.timeZone = "America/Los_Angeles";
 
+  services.xserver = {
+    wacom.enable = true;
+    modules = with pkgs; [ xf86_input_wacom ];
+    multitouch = {
+      enable = true;
+      ignorePalm = true;
+    };
+  };
+
   system.stateVersion = "19.09";
 }
