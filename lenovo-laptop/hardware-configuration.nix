@@ -31,7 +31,6 @@
 
   swapDevices =
     [ { device = "/dev/disk/by-partuuid/0b066fa6-e35c-da41-8041-a22d4d8ab50d";
-        encrypted.label = "nixswap";
         randomEncryption.enable = true;
       }
     ];
