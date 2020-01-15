@@ -15,6 +15,7 @@ in { config, lib, pkgs, ... }: {
     imports = [
         "${home-manager}/nixos"
         ./entertainment.nix
+        ../cachix.nix
     ];
 
     boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -42,6 +43,7 @@ in { config, lib, pkgs, ... }: {
             wget
             htop
             neovim
+            cachix
         ];
         variables = {
             EDITOR = "nvim";
