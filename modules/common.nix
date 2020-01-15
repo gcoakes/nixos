@@ -74,4 +74,6 @@ in { config, lib, pkgs, ... }: {
       ports = [ 2222 ];
       authorizedKeysFiles = [ ".config/ssh/authorized_keys" ];
     };
+
+    nix.gc.automatic = true;
 }
