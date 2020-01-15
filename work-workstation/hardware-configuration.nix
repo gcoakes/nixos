@@ -19,12 +19,12 @@
       options = [ "discard,noatime,compress=lzo,subvol=@" ];
     };
 
-  boot.initrd.luks.devices = [
-    { name = "cryptnix";
-      device = "/dev/disk/by-uuid/d46b9e6f-3f2b-4398-be5a-33f3b36be19a";
-      allowDiscards = true;
-    }
-  ];
+  boot.initrd.luks.devices = {
+    cryptnix =
+      { device = "/dev/disk/by-uuid/d46b9e6f-3f2b-4398-be5a-33f3b36be19a";
+        allowDiscards = true;
+      };
+  };
 
   fileSystems."/home" =
     { device = "/dev/mapper/cryptnix";
