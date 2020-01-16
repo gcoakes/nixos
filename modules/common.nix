@@ -20,7 +20,10 @@ in { config, lib, pkgs, ... }: {
 
     boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    programs.zsh.enable = true;
+    programs.zsh = {
+      enable = true;
+      syntaxHighlighting.enable = true;
+    };
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.gcoakes = {
