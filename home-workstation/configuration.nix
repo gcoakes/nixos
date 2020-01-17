@@ -15,29 +15,16 @@
     boot.loader.efi.canTouchEfiVariables = true;
 
     networking.hostName = "workstation"; # Define your hostname.
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    networking.networkmanager.enable = true;
 
     # The global useDHCP flag is deprecated, therefore explicitly set to false here.
     # Per-interface useDHCP will be mandatory in the future, so this generated config
     # replicates the default behaviour.
     networking.useDHCP = false;
     networking.interfaces.enp7s0.useDHCP = true;
+    networking.interfaces.wlp6s0.useDHCP = true;
 
-    # Configure network proxy if necessary
-    # networking.proxy.default = "http://user:password@proxy:port/";
-    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-    # Select internationalisation properties.
-    # i18n = {
-    #   consoleFont = "Lat2-Terminus16";
-    #   consoleKeyMap = "us";
-    #   defaultLocale = "en_US.UTF-8";
-    # };
-
-    # List services that you want to enable:
-
-    # Enable the OpenSSH daemon.
-    # services.openssh.enable = true;
+    services.xserver.dpi = 120;
 
     system.stateVersion = "19.09";
 }
