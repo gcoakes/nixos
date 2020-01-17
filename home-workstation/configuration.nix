@@ -26,6 +26,10 @@
 
     services.xserver.dpi = 120;
 
+    environment.variables =
+      { WINIT_HIDPI_FACTOR = "1.5";
+      };
+
     system.stateVersion = "19.09";
 }
 
