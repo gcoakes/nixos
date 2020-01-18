@@ -30,6 +30,6 @@
       { WINIT_HIDPI_FACTOR = "1.5";
       };
 
-    system.stateVersion = "19.09";
+    system.stateVersion = "20.03";
 }
 
