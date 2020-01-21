@@ -37,5 +37,10 @@
     };
   };
 
-  system.stateVersion = "19.09";
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "powersave";
+  };
+
+  system.stateVersion = "20.03";
 }
