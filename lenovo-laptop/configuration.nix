@@ -31,10 +31,6 @@
   services.xserver = {
     wacom.enable = true;
     modules = with pkgs; [ xf86_input_wacom ];
-    multitouch = {
-      enable = true;
-      ignorePalm = true;
-    };
   };
 
   powerManagement = {
