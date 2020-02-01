@@ -13,10 +13,19 @@
 
   boot.initrd.supportedFilesystems = [ "btrfs" ];
 
+  boot.initrd.luks.reusePassphrases = true;
+
   boot.initrd.luks.devices."cryptnix" =
     { device = "/dev/disk/by-uuid/2cd8df23-2186-4ab8-98ca-91f422e29b5c";
       allowDiscards = true;
     };
+
+  boot.initrd.luks.devices."cryptswap" =
+    { device = "/dev/disk/by-uuid/41d63537-1724-4f11-b912-94279187a3bc";
+      allowDiscards = true;
+    };
+
+  boot.resumeDevice = "/dev/mapper/cryptswap";
 
   fileSystems."/" =
     { device = "/dev/mapper/cryptnix";
@@ -29,11 +38,7 @@
       fsType = "vfat";
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-partuuid/0b066fa6-e35c-da41-8041-a22d4d8ab50d";
-        randomEncryption.enable = true;
-      }
-    ];
+  swapDevices = [ { device = "/dev/mapper/cryptswap"; } ];
 
   services.xserver.videoDrivers = [ "amdgpu" "radeon" ];
   hardware =
