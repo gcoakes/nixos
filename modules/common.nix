@@ -1,16 +1,22 @@
+with builtins;
 let
     gcoakes-nixhome =
-        if builtins.pathExists ("/home/gcoakes/.config/nixpkgs/home.nix") then (
+        if pathExists ("/home/gcoakes/.config/nixpkgs/home.nix") then (
             "/home/gcoakes/.config/nixpkgs/home.nix"
         ) else (
-            builtins.fetchGit {
+            fetchGit {
               url = https://gitlab.com/gcoakes/nixhome.git;
               name = "gcoakes-nixhome";
             } + "/home.nix"
         );
-    home-manager = builtins.fetchTarball {
-        url = https://github.com/rycee/home-manager/archive/release-19.09.tar.gz;
-    };
+    home-manager =
+      if pathExists "/home/gcoakes/src/home-manager" then (
+        "/home/gcoakes/src/home-manager"
+      ) else (
+        fetchTarball {
+          url = https://github.com/rycee/home-manager/archive/master.tar.gz;
+        }
+      );
 in { config, lib, pkgs, ... }: {
     imports = [
         "${home-manager}/nixos"
