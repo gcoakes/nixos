@@ -36,5 +36,8 @@
                 cursorTheme.package = pkgs.capitaine-cursors;
             };
         };
+        serverFlagsSection = ''
+          Option "DontVTSwitch" "True"
+          '';
     };
 }
