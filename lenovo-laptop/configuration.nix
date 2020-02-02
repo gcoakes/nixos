@@ -38,6 +38,19 @@
     lidSwitchExternalPower = "suspend";
   };
 
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+    package = pkgs.pulseaudioFull;
+    configFile = pkgs.runCommand "default.pa" {} ''
+      sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
+        ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+      echo 'load-module module-bluetooth-policy' >> $out
+      echo 'load-module module-bluetooth-discover' >> $out
+    '';
+  };
+
   powerManagement = {
     enable = true;
     cpuFreqGovernor = "powersave";
