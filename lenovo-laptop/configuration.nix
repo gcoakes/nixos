@@ -33,6 +33,11 @@
     modules = with pkgs; [ xf86_input_wacom ];
   };
 
+  services.logind = {
+    lidSwitch = "suspend-then-hibernate";
+    lidSwitchExternalPower = "suspend";
+  };
+
   powerManagement = {
     enable = true;
     cpuFreqGovernor = "powersave";
