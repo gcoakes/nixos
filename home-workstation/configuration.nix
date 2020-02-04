@@ -10,6 +10,8 @@
         ./modules/common.nix
     ];
 
+    nixpkgs.config.allowUnfree = true;
+
     entertainment.enable = true;
 
     # Use the systemd-boot EFI boot loader.
@@ -25,6 +27,19 @@
     networking.useDHCP = false;
     networking.interfaces.enp7s0.useDHCP = true;
     networking.interfaces.wlp6s0.useDHCP = true;
+
+    hardware.bluetooth.enable = true;
+    services.blueman.enable = true;
+    hardware.pulseaudio = {
+        enable = true;
+        package = pkgs.pulseaudioFull;
+        configFile = pkgs.runCommand "default.pa" {} ''
+            sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
+                ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+            echo 'load-module module-bluetooth-policy' >> $out
+            echo 'load-module module-bluetooth-discover' >> $out
+        '';
+    };
 
     services.xserver.dpi = 120;
 
