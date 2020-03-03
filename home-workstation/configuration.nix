@@ -47,6 +47,9 @@
       { WINIT_HIDPI_FACTOR = "1.7";
       };
 
+    # Configure docker.
+    virtualisation.docker.enable = true;
+
     system.stateVersion = "20.03";
 }
 
