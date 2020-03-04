@@ -51,11 +51,9 @@ in { config, lib, pkgs, ... }: {
             git
             wget
             htop
-            neovim
             cachix
         ];
         variables = {
-            EDITOR = "nvim";
             PAGER = "less";
         };
     };
