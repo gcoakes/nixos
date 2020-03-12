@@ -42,7 +42,7 @@ in { config, lib, pkgs, ... }: {
     home-manager.users.gcoakes = import gcoakes-nixhome;
 
     # Set your time zone.
-    time.timeZone = "America/Los_Angeles";
+    time.timeZone = "US/Central";
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget

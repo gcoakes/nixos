@@ -2,70 +2,70 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, ... }: {
-    imports = [
-        <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+  imports = [
+    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+  ];
+
+  boot = {
+    supportedFilesystems = [ "btrfs" ];
+    initrd = {
+      supportedFilesystems = [ "btrfs" ];
+      availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+      kernelModules = [];
+    };
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [];
+  };
+
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+      fsType = "btrfs";
+      options = [ "compress=lzo,discard,noatime,subvol=@" ];
+    };
+
+    "/home" = {
+      device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+      fsType = "btrfs";
+      options = [ "compress=lzo,discard,noatime,subvol=@home" ];
+    };
+
+    "/nix" = {
+      device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+      fsType = "btrfs";
+      options = [ "compress=lzo,discard,noatime,subvol=@nix" ];
+    };
+
+    "/boot" = {
+      device = "/dev/disk/by-uuid/CC42-1ECC";
+      fsType = "vfat";
+    };
+
+    "/mnt/data" = {
+      device = "/dev/disk/by-uuid/26fb826f-2cc2-4c64-afd4-1245c20f1095";
+      fsType = "ext4";
+    };
+  };
+
+  swapDevices = [
+    { device = "/dev/disk/by-uuid/df0c60c6-5b1f-46ca-a417-418f4ab1ab72"; }
+  ];
+
+  services.xserver = {
+    videoDrivers = [ "amdgpu" "radeon" ];
+    xrandrHeads = [
+      { output = "DisplayPort-1"; monitorConfig = ''Option "Rotate" "left"''; }
+      { output = "DisplayPort-2"; primary = true; }
+      "HDMI-A-0"
     ];
-
-    boot = {
-        supportedFilesystems = [ "btrfs" ];
-        initrd = {
-            supportedFilesystems = [ "btrfs" ];
-            availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-            kernelModules = [ ];
-        };
-        kernelModules = [ "kvm-amd" ];
-        extraModulePackages = [ ];
+  };
+  hardware = {
+    cpu.amd.updateMicrocode = true;
+    opengl = {
+      enable = true;
+      driSupport32Bit = true;
     };
+  };
 
-    fileSystems = {
-        "/" = {
-            device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
-            fsType = "btrfs";
-            options = [ "compress=lzo,discard,noatime,subvol=@" ];
-        };
-
-        "/home" = {
-            device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
-            fsType = "btrfs";
-            options = [ "compress=lzo,discard,noatime,subvol=@home" ];
-        };
-
-        "/nix" = {
-            device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
-            fsType = "btrfs";
-            options = [ "compress=lzo,discard,noatime,subvol=@nix" ];
-        };
-
-        "/boot" = {
-            device = "/dev/disk/by-uuid/CC42-1ECC";
-            fsType = "vfat";
-        };
-
-        "/mnt/data" = {
-            device = "/dev/disk/by-uuid/26fb826f-2cc2-4c64-afd4-1245c20f1095";
-            fsType = "ext4";
-        };
-    };
-
-    swapDevices = [
-        { device = "/dev/disk/by-uuid/df0c60c6-5b1f-46ca-a417-418f4ab1ab72"; }
-    ];
-
-    services.xserver = {
-      videoDrivers = [ "amdgpu" "radeon" ];
-      xrandrHeads = [
-        { output = "DisplayPort-1"; monitorConfig = ''Option "Rotate" "left"''; }
-        { output = "DisplayPort-2"; primary = true; }
-        "HDMI-A-0"
-      ];
-    };
-    hardware = {
-        cpu.amd.updateMicrocode = true;
-        opengl = {
-            enable = true;
-            driSupport32Bit = true;
-        };
-    };
-
-    nix.maxJobs = lib.mkDefault 16;
+  nix.maxJobs = lib.mkDefault 16;
 }
