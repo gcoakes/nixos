@@ -27,16 +27,20 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  programs.zsh = {
+  programs.fish = {
     enable = true;
-    syntaxHighlighting.enable = true;
+    vendor = {
+      functions.enable = true;
+      config.enable = true;
+      completions.enable = true;
+    };
   };
 
   programs.adb.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.gcoakes = {
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     createHome = true;
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
