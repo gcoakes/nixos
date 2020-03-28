@@ -26,6 +26,12 @@
       accelProfile = "flat";
       accelSpeed = "0";
     };
+    videoDrivers = [ "amdgpu" "radeon" ];
+    xrandrHeads = [
+      { output = "DisplayPort-1"; monitorConfig = ''Option "Rotate" "left"''; }
+      { output = "DisplayPort-2"; primary = true; }
+      "HDMI-A-0"
+    ];
     desktopManager = {
       xterm.enable = false;
       session = [
