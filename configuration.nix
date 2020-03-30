@@ -26,6 +26,8 @@ with builtins;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
   };
 
+  programs.adb.enable = true;
+
   ##########################
   ######## Serivces ########
   ##########################
@@ -57,6 +59,10 @@ with builtins;
 
   nixpkgs.config.allowUnfree = true;
   time.timeZone = "US/Central";
+
+  nix.binaryCaches = [ "https://nixcache.reflex-frp.org" ];
+  nix.binaryCachePublicKeys =
+    [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
 
   ###########################################
   ######## System Package Management ########
