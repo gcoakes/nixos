@@ -53,6 +53,8 @@ with builtins;
 
   virtualisation.docker.enable = true;
 
+  virtualisation.libvirtd.enable = true;
+
   ######################
   ######## Misc ########
   ######################
@@ -71,6 +73,7 @@ with builtins;
   environment.systemPackages = with pkgs; [
     git
     cachix
+    vulkan-loader
   ];
 
   system = {
