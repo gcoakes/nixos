@@ -4,6 +4,7 @@ with builtins;
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ./graphical.nix
     ./cachix.nix
+    ./services.nix
   ];
 
   ####################################
@@ -162,6 +163,11 @@ with builtins;
     "/mnt/data" = {
       device = "/dev/disk/by-uuid/26fb826f-2cc2-4c64-afd4-1245c20f1095";
       fsType = "ext4";
+    };
+
+    "/mnt/work" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
     };
   };
 
