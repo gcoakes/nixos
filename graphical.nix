@@ -13,11 +13,9 @@
   fonts = {
     fontconfig = {
       enable = true;
-      defaultFonts.monospace = [ "FuraCode Nerd Font" ];
+      defaultFonts.monospace = [ "Hasklug Nerd Font Complete" ];
     };
-    fonts = with pkgs; [
-      nerdfonts
-    ];
+    fonts = with pkgs; [ nerdfonts ];
   };
 
   # Enable the X11 windowing system.
@@ -31,29 +29,36 @@
     };
     videoDrivers = [ "amdgpu" "radeon" ];
     xrandrHeads = [
-      { output = "DisplayPort-1"; monitorConfig = ''Option "Rotate" "left"''; }
-      { output = "DisplayPort-2"; primary = true; }
+      {
+        output = "DisplayPort-1";
+        monitorConfig = ''Option "Rotate" "left"'';
+      }
+      {
+        output = "DisplayPort-2";
+        primary = true;
+      }
       "HDMI-A-0"
     ];
     desktopManager = {
       xterm.enable = false;
-      session = [
-        {
-          name = "home-manager";
-          bgSupport = true;
-          start = ''
-            ${pkgs.runtimeShell} $HOME/.hm-xsession &
-            waitPID=$!
-          '';
-        }
-      ];
+      session = [{
+        name = "home-manager";
+        bgSupport = true;
+        start = ''
+          ${pkgs.runtimeShell} $HOME/.hm-xsession &
+          waitPID=$!
+        '';
+      }];
     };
-    displayManager.lightdm = {
-      enable = true;
-      greeters.enso = {
+    displayManager = {
+      lightdm = {
         enable = true;
-        cursorTheme.package = pkgs.capitaine-cursors;
+        greeters.enso = {
+          enable = true;
+          cursorTheme.package = pkgs.capitaine-cursors;
+        };
       };
+      defaultSession = "home-manager";
     };
     serverFlagsSection = ''
       Option "DontVTSwitch" "True"
