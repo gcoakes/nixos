@@ -1,4 +1,12 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+let
+  unstable = import (pkgs.fetchFromGitHub {
+    owner = "NixOS";
+    repo = "nixpkgs";
+    rev = "0a146054bdf6f70f66de4426f84c9358521be31e";
+    sha256 = "154ypjfhy9qqa0ww6xi7d8280h85kffqaqf6b6idymizga9ckjcd";
+  }) { };
+in {
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio = {
@@ -15,7 +23,8 @@
       enable = true;
       defaultFonts.monospace = [ "Hasklug Nerd Font Complete" ];
     };
-    fonts = with pkgs; [ nerdfonts ];
+    fonts = with pkgs;
+      [ (unstable.nerdfonts.override { fonts = [ "Hasklig" ]; }) ];
   };
 
   environment.systemPackages = with pkgs.gnome3; [
