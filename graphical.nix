@@ -18,6 +18,12 @@
     fonts = with pkgs; [ nerdfonts ];
   };
 
+  environment.systemPackages = with pkgs.gnome3; [
+    gnome-shell-extensions
+    gnome-tweaks
+  ];
+  services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
+
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -27,41 +33,12 @@
       accelProfile = "flat";
       accelSpeed = "0";
     };
-    videoDrivers = [ "amdgpu" "radeon" ];
-    xrandrHeads = [
-      {
-        output = "DisplayPort-1";
-        monitorConfig = ''Option "Rotate" "left"'';
-      }
-      {
-        output = "DisplayPort-2";
-        primary = true;
-      }
-      "HDMI-A-0"
-    ];
     desktopManager = {
       xterm.enable = false;
-      session = [{
-        name = "home-manager";
-        bgSupport = true;
-        start = ''
-          ${pkgs.runtimeShell} $HOME/.hm-xsession &
-          waitPID=$!
-        '';
-      }];
+      gnome3.enable = true;
     };
-    displayManager = {
-      lightdm = {
-        enable = true;
-        greeters.enso = {
-          enable = true;
-          cursorTheme.package = pkgs.capitaine-cursors;
-        };
-      };
-      defaultSession = "home-manager";
-    };
-    serverFlagsSection = ''
-      Option "DontVTSwitch" "True"
-    '';
+    displayManager.gdm.enable = true;
   };
+
+  programs.gnupg.agent.pinentryFlavor = "gnome3";
 }
