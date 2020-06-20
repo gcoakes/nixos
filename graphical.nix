@@ -27,12 +27,6 @@ in {
       [ (unstable.nerdfonts.override { fonts = [ "Hasklig" ]; }) ];
   };
 
-  environment.systemPackages = with pkgs.gnome3; [
-    gnome-shell-extensions
-    gnome-tweaks
-  ];
-  services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
-
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -44,10 +38,21 @@ in {
     };
     desktopManager = {
       xterm.enable = false;
-      gnome3.enable = true;
+      session = [{
+        name = "home-manager";
+        bgSupport = true;
+        start = ''
+          ${pkgs.runtimeShell} $HOME/.hm-xsession &
+          waitPID=$!
+        '';
+      }];
     };
-    displayManager.gdm.enable = true;
+    displayManager = {
+      lightdm.enable = true;
+      defaultSession = "home-manager";
+    };
   };
 
-  programs.gnupg.agent.pinentryFlavor = "gnome3";
+  programs.gnupg.agent.pinentryFlavor = "gtk2";
+  programs.dconf.enable = true;
 }
