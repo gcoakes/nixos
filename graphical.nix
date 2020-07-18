@@ -55,4 +55,6 @@ in {
 
   programs.gnupg.agent.pinentryFlavor = "gtk2";
   programs.dconf.enable = true;
+
+  security.chromiumSuidSandbox.enable = true;
 }
