@@ -50,7 +50,7 @@ with builtins;
     challengeResponseAuthentication = false;
     permitRootLogin = "no";
     ports = [ 2222 ];
-    authorizedKeysFiles = [ ".config/ssh/authorized_keys" ];
+    authorizedKeysFiles = [ ".ssh/authorized_keys" ];
   };
 
   virtualisation.docker.enable = true;
