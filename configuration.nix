@@ -26,7 +26,7 @@ with builtins;
     createHome = true;
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
-    openssh.authorizedKeys.keyFiles = [ ./ssh-laptop.pub ];
+    openssh.authorizedKeys.keyFiles = [ ./ssh-laptop.pub ./ssh-workstation.pub ];
   };
 
   programs.adb.enable = true;
