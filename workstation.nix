@@ -28,10 +28,18 @@
     initrd = {
       supportedFilesystems = [ "btrfs" ];
       availableKernelModules =
-        [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+        [ "vfio-pci" "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
       kernelModules = [ ];
+      preDeviceCommands = ''
+        DEVS="0000:01:00.0"
+        for DEV in $DEVS; do
+          echo "vfio-pci" > /sys/bus/pci/devices/$DEV/driver_override
+        done
+        modprobe -i vfio-pci
+        '';
     };
     kernelModules = [ "kvm-amd" ];
+    kernelParams = [ "amd_iommu=on" "pcie_aspm=off" ];
     extraModulePackages = [ ];
   };
 
