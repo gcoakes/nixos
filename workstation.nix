@@ -67,14 +67,27 @@
       fsType = "vfat";
     };
 
-    "/mnt/data" = {
-      device = "/dev/disk/by-uuid/26fb826f-2cc2-4c64-afd4-1245c20f1095";
-      fsType = "ext4";
+    "/var/lib/docker" = {
+      device = "/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_18JOK5H4FSAA";
+      fsType = "btrfs";
+      options = [
+        "device=/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_18JOK5H4FSAA"
+        "device=/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_28QIKI8WFSAA"
+        "noatime"
+        "subvol=@docker"
+      ];
     };
 
-    "/mnt/work" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
+    "/mnt/data" = {
+      device = "/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_18JOK5H4FSAA";
+      fsType = "btrfs";
+      options = [
+        "device=/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_18JOK5H4FSAA"
+        "device=/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_28QIKI8WFSAA"
+        "compress=lzo"
+        "noatime"
+        "subvol=@data"
+      ];
     };
   };
 
