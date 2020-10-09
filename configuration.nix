@@ -6,6 +6,40 @@ with builtins;
     ./workstation.nix
   ];
 
+  #############################
+  ######## Filesystems ########
+  #############################
+
+  fileSystems = {
+    "/" = {
+      label = "nixos";
+      fsType = "btrfs";
+      options = [ "compress=lzo,discard,noatime,subvol=@" ];
+    };
+
+    "/home" = {
+      label = "nixos";
+      fsType = "btrfs";
+      options = [ "compress=lzo,discard,noatime,subvol=@home" ];
+    };
+
+    "/nix" = {
+      label = "nixos";
+      fsType = "btrfs";
+      options = [ "compress=lzo,discard,noatime,subvol=@nix" ];
+    };
+
+    "/boot" = {
+      label = "boot";
+      fsType = "vfat";
+    };
+  };
+
+  boot = {
+    supportedFilesystems = [ "btrfs" ];
+    initrd.supportedFilesystems = [ "btrfs" ];
+  };
+
   ####################################
   ######## User Configuration ########
   ####################################
