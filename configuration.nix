@@ -11,7 +11,7 @@ with builtins;
   ####################################
 
   users.users.gcoakes = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     createHome = true;
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
