@@ -41,25 +41,25 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+      label = "nixos";
       fsType = "btrfs";
       options = [ "compress=lzo,discard,noatime,subvol=@" ];
     };
 
     "/home" = {
-      device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+      label = "nixos";
       fsType = "btrfs";
       options = [ "compress=lzo,discard,noatime,subvol=@home" ];
     };
 
     "/nix" = {
-      device = "/dev/disk/by-uuid/1436a8d5-fbfc-4c46-941b-28b2eddc3b7a";
+      label = "nixos";
       fsType = "btrfs";
       options = [ "compress=lzo,discard,noatime,subvol=@nix" ];
     };
 
     "/boot" = {
-      device = "/dev/disk/by-uuid/CC42-1ECC";
+      label = "boot";
       fsType = "vfat";
     };
 
@@ -87,8 +87,6 @@
     };
   };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/df0c60c6-5b1f-46ca-a417-418f4ab1ab72"; }];
   hardware = {
     cpu.amd.updateMicrocode = true;
     opengl = {
