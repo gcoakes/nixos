@@ -1,7 +1,4 @@
-{ config, lib, pkgs, ... }:
-let
-  unstable = import <nixos-unstable> {};
-in {
+{ config, lib, pkgs, ... }: {
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio = {
@@ -18,8 +15,7 @@ in {
       enable = true;
       defaultFonts.monospace = [ "Hasklug Nerd Font Complete" ];
     };
-    fonts = with pkgs;
-      [ (unstable.nerdfonts.override { fonts = [ "Hasklig" ]; }) ];
+    fonts = [ (pkgs.nerdfonts.override { fonts = [ "Hasklig" ]; }) ];
   };
 
   # Enable the X11 windowing system.

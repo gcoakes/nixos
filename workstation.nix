@@ -3,10 +3,6 @@
     videoDrivers = [ "amdgpu" "radeon" ];
     xrandrHeads = [
       {
-        output = "DisplayPort-1";
-        monitorConfig = ''Option "Rotate" "left"'';
-      }
-      {
         output = "DisplayPort-2";
         primary = true;
       }

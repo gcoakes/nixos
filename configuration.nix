@@ -3,23 +3,12 @@ with builtins;
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ./graphical.nix
-    ./cachix.nix
-    ./services.nix
     ./workstation.nix
   ];
 
   ####################################
   ######## User Configuration ########
   ####################################
-
-  programs.fish = {
-    enable = true;
-    vendor = {
-      functions.enable = true;
-      config.enable = true;
-      completions.enable = true;
-    };
-  };
 
   users.users.gcoakes = {
     shell = pkgs.fish;
@@ -62,10 +51,6 @@ with builtins;
   nixpkgs.config.allowUnfree = true;
   time.timeZone = "US/Central";
 
-  nix.binaryCaches = [ "https://nixcache.reflex-frp.org" ];
-  nix.binaryCachePublicKeys =
-    [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
-
   ###########################################
   ######## System Package Management ########
   ###########################################
@@ -79,7 +64,7 @@ with builtins;
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.03";
+  system.stateVersion = "20.09";
 
   ########################################
   ######## Hardware Configuration ########
