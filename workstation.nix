@@ -31,7 +31,7 @@
     };
     kernelModules = [ "kvm-amd" ];
     kernelParams = [ "amd_iommu=on" "pcie_aspm=off" ];
-    extraModulePackages = [ ];
+    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   };
 
   fileSystems = {
