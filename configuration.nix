@@ -38,6 +38,10 @@ with builtins;
   boot = {
     supportedFilesystems = [ "btrfs" ];
     initrd.supportedFilesystems = [ "btrfs" ];
+    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+    extraModprobeConfig = ''
+      options v4l2loopback exclusive_caps=1
+    '';
   };
 
   ####################################
