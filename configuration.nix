@@ -42,6 +42,7 @@ with builtins;
     extraModprobeConfig = ''
       options v4l2loopback exclusive_caps=1
     '';
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   ####################################
@@ -132,5 +133,5 @@ with builtins;
     '';
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages;
 }
