@@ -3,7 +3,7 @@ with builtins;
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ./graphical.nix
-    ./workstation.nix
+    ./laptop.nix
   ];
 
   #############################
@@ -34,6 +34,8 @@ with builtins;
       fsType = "vfat";
     };
   };
+
+  swapDevices = [ { label = "swap"; } ];
 
   boot = {
     supportedFilesystems = [ "btrfs" ];
