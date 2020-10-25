@@ -4,6 +4,7 @@
     libinput.calibrationMatrix = "2.4 0 0 0 2.4 0 0 0 1";
   };
 
+  networking.dhcpcd.wait = "background";
   networking.interfaces.enp4s0f3u2.useDHCP = true;
   networking.interfaces.wlp2s0.useDHCP = true;
 
