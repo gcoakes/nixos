@@ -44,8 +44,6 @@ in { config, pkgs, ... }: {
     };
   };
 
-  swapDevices = [{ label = "swap"; }];
-
   boot = {
     supportedFilesystems = [ "btrfs" ];
     initrd.supportedFilesystems = [ "btrfs" ];

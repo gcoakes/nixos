@@ -7,6 +7,8 @@
   networking.interfaces.enp4s0f3u2.useDHCP = true;
   networking.interfaces.wlp2s0.useDHCP = true;
 
+  swapDevices = [{ label = "swap"; }];
+
   boot = {
     initrd = {
       availableKernelModules =
