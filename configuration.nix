@@ -1,9 +1,18 @@
 with builtins;
-{ config, pkgs, ... }: {
+let
+  # There's a bug in builtins.readFile which prevents it from reading sysfs
+  # files.
+  productUuidHash =
+    builtins.hashFile "md5" /sys/devices/virtual/dmi/id/product_uuid;
+  systemName = builtins.getAttr productUuidHash {
+    "5f90cc144722d859b5eff64fc7883e34" = "laptop";
+    "f625c25ec3042336db5fe1d4b821deb6" = "workstation";
+  };
+in { config, pkgs, ... }: {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ./graphical.nix
-    ./laptop.nix
+    (./. + "/${systemName}.nix")
   ];
 
   #############################
@@ -35,7 +44,7 @@ with builtins;
     };
   };
 
-  swapDevices = [ { label = "swap"; } ];
+  swapDevices = [{ label = "swap"; }];
 
   boot = {
     supportedFilesystems = [ "btrfs" ];
@@ -56,7 +65,8 @@ with builtins;
     createHome = true;
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
-    openssh.authorizedKeys.keyFiles = [ ./ssh-laptop.pub ./ssh-workstation.pub ];
+    openssh.authorizedKeys.keyFiles =
+      [ ./ssh-laptop.pub ./ssh-workstation.pub ];
   };
 
   programs.adb.enable = true;
@@ -116,6 +126,7 @@ with builtins;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.networkmanager.enable = true;
+  networking.hostName = systemName;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config

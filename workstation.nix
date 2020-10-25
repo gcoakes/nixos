@@ -12,7 +12,6 @@
 
   virtualisation.libvirtd.enable = true;
 
-  networking.hostName = "workstation";
   networking.interfaces.enp7s0.useDHCP = true;
   networking.interfaces.wlp6s0.useDHCP = true;
 
@@ -27,7 +26,7 @@
           echo "vfio-pci" > /sys/bus/pci/devices/$DEV/driver_override
         done
         modprobe -i vfio-pci
-        '';
+      '';
     };
     kernelModules = [ "kvm-amd" ];
     kernelParams = [ "amd_iommu=on" "pcie_aspm=off" ];
