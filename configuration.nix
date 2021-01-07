@@ -8,7 +8,14 @@ let
     "5f90cc144722d859b5eff64fc7883e34" = "laptop";
     "f625c25ec3042336db5fe1d4b821deb6" = "workstation";
   };
-in { config, pkgs, ... }: {
+in { config, pkgs, ... }:
+let
+  dodPki = pkgs.fetchzip {
+    url =
+      "https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-10_wcf.zip";
+    sha256 = "1sjkgbpi0d032xgnhx1zi1liqmaxwln8vr2kf512hnq1izk19vcq";
+  };
+in {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ./graphical.nix
@@ -99,6 +106,9 @@ in { config, pkgs, ... }: {
 
   nixpkgs.config.allowUnfree = true;
   time.timeZone = "US/Central";
+
+  security.pki.certificates =
+    [ (builtins.readFile "${dodPki}/DoD_PKE_CA_chain.pem") ];
 
   ###########################################
   ######## System Package Management ########
