@@ -2,7 +2,7 @@
   services.xserver = {
     videoDrivers = [ "amdgpu" "radeon" ];
     xrandrHeads = [
-      "HDMI-A-0"
+      { output = "HDMI-A-0"; }
       {
         output = "DisplayPort-2";
         primary = true;
