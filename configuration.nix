@@ -84,6 +84,7 @@ in {
   services.udev.packages = with pkgs; [
     android-udev-rules
     yubikey-personalization
+    ledger-udev-rules
   ];
 
   # Enable using smart cards.
