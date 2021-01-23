@@ -55,6 +55,18 @@
         "subvol=@data"
       ];
     };
+
+    "/var/lib/ipfs" = {
+      device = "/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_18JOK5H4FSAA";
+      fsType = "btrfs";
+      options = [
+        "device=/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_18JOK5H4FSAA"
+        "device=/dev/disk/by-id/ata-TOSHIBA_MD04ACA400_28QIKI8WFSAA"
+        "compress=lzo"
+        "noatime"
+        "subvol=@ipfs"
+      ];
+    };
   };
 
   hardware = {
@@ -63,6 +75,11 @@
       enable = true;
       driSupport32Bit = true;
     };
+  };
+
+  services.ipfs = {
+    enable = true;
+    autoMount = true;
   };
 }
 
