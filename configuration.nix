@@ -99,6 +99,18 @@ in {
     ports = [ 2222 ];
   };
 
+  services.ipfs = {
+    enable = true;
+    dataDir = "/var/lib/ipfs";
+    autoMount = true;
+    enableGC = true;
+    extraFlags = [ "--enable-pubsub-experiment" ];
+    extraConfig.Pubsub = {
+      Router = "gossipsub";
+      DisableSigning = false;
+    };
+  };
+
   virtualisation.docker.enable = true;
 
   ######################

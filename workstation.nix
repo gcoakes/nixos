@@ -76,10 +76,5 @@
       driSupport32Bit = true;
     };
   };
-
-  services.ipfs = {
-    enable = true;
-    autoMount = true;
-  };
 }
 
