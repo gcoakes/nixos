@@ -111,6 +111,9 @@ in {
     };
   };
 
+  services.flatpak.enable = true;
+  xdg.portal.enable = true;
+
   virtualisation.docker.enable = true;
 
   ######################
