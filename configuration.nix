@@ -112,7 +112,10 @@ in {
   };
 
   services.flatpak.enable = true;
-  xdg.portal.enable = true;
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
 
   virtualisation.docker.enable = true;
 
