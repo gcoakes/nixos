@@ -1,32 +1,4 @@
 { config, lib, pkgs, ... }: {
-  services.xserver = {
-    desktopManager = {
-      xterm.enable = false;
-      session = [{
-        name = "home-manager";
-        bgSupport = true;
-        start = ''
-          ${pkgs.runtimeShell} $HOME/.hm-xsession &
-          waitPID=$!
-        '';
-      }];
-    };
-    displayManager = {
-      lightdm.enable = true;
-      defaultSession = "home-manager";
-    };
-    videoDrivers = [ "amdgpu" "radeon" ];
-    xrandrHeads = [
-      { output = "HDMI-A-0"; }
-      {
-        output = "DisplayPort-2";
-        primary = true;
-      }
-    ];
-  };
-
-  programs.gnupg.agent.pinentryFlavor = "gtk2";
-
   virtualisation.libvirtd.enable = true;
 
   networking.interfaces.enp7s0.useDHCP = true;

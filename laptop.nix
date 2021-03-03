@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }: {
   services.xserver = {
-    displayManager.gdm.enable = true;
-    desktopManager.gnome3.enable = true;
     videoDrivers = [ "amdgpu" "radeon" ];
     libinput = {
       enable = true;
@@ -11,17 +9,6 @@
       dev = "/dev/input/event14";
     };
   };
-
-  environment.gnome3.excludePackages = with pkgs.gnome3; [
-    epiphany
-    geary
-    gedit
-    gnome-terminal
-    seahorse
-    yelp
-  ];
-
-  programs.gnupg.agent.pinentryFlavor = "gnome";
 
   networking.dhcpcd.wait = "background";
   networking.interfaces.wlp2s0.useDHCP = true;

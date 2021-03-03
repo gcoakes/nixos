@@ -138,6 +138,9 @@ in {
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome3.enable = true;
+    videoDrivers = [ "amdgpu" "radeon" ];
     layout = "us";
     libinput = {
       enable = true;
@@ -145,6 +148,17 @@ in {
       accelSpeed = "0";
     };
   };
+
+  environment.gnome3.excludePackages = with pkgs.gnome3; [
+    epiphany
+    geary
+    gedit
+    gnome-terminal
+    seahorse
+    yelp
+  ];
+
+  programs.gnupg.agent.pinentryFlavor = "gnome";
 
   programs.dconf.enable = true;
 
