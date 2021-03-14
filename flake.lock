@@ -31,7 +31,9 @@
     },
     "home-manager": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1615419569,
@@ -81,20 +83,6 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1615744545,
-        "narHash": "sha256-mUNdgRXiLiOEsfC1uGASsbeFSNAf7kaHSWnuj4nYjMM=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "7163929ceece23d17f5198e35c0c2c6cff1bc625",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
         "lastModified": 1615532953,
         "narHash": "sha256-SWpaGjrp/INzorEqMz3HLi6Uuk9I0KAn4YS8B4n3q5g=",
         "owner": "NixOS",
@@ -116,7 +104,7 @@
         "home-manager": "home-manager",
         "kitty-themes": "kitty-themes",
         "lutris-skyrimse-installers": "lutris-skyrimse-installers",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

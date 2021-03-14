@@ -320,6 +320,25 @@ in
         fi
       '';
     };
+    configFile."tmuxp/nix.json".text = builtins.toJSON {
+      windows = [
+        {
+          panes = [
+            {
+              shell_command = "while :; do nvim; done";
+              focus = true;
+            }
+            {}
+          ];
+          layout = "main-horizontal";
+          options.main-pane-height = 40;
+          focus = true;
+          window_name = "editor";
+        }
+      ];
+      session_name = "nix";
+      start_directory = "/etc/nixos";
+    };
   };
 
   home.file = {
