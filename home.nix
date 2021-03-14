@@ -163,6 +163,9 @@ in
           export EDITOR="${tnvr} -s"
           alias nvim="${tnvr} -s"
         fi
+        function editor() {
+          tmuxp load default
+        }
       '';
     };
     git = {
@@ -338,6 +341,25 @@ in
       ];
       session_name = "nix";
       start_directory = "/etc/nixos";
+    };
+    configFile."tmuxp/default.json".text = builtins.toJSON {
+      windows = [
+        {
+          panes = [
+            {
+              shell_command = "while :; do nvim; done";
+              focus = true;
+            }
+            {}
+          ];
+          layout = "main-horizontal";
+          options.main-pane-height = 40;
+          focus = true;
+          window_name = "editor";
+        }
+      ];
+      session_name = "\${PWD}";
+      start_directory = "\${PWD}";
     };
   };
 
