@@ -8,7 +8,7 @@
     initrd = {
       availableKernelModules =
         [ "vfio-pci" "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-      kernelModules = [ ];
+      kernelModules = [];
       preDeviceCommands = ''
         DEVS="0000:01:00.0"
         for DEV in $DEVS; do
@@ -62,8 +62,17 @@
     cpu.amd.updateMicrocode = true;
     opengl = {
       enable = true;
+      extraPackages = with pkgs; [
+        rocm-opencl-icd
+        amdvlk
+      ];
+      extraPackages32 = with pkgs; [
+        driversi686Linux.amdvlk
+      ];
       driSupport32Bit = true;
     };
   };
-}
 
+  environment.variables.VK_ICD_FILENAMES =
+    "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
+}

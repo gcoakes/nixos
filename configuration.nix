@@ -8,216 +8,227 @@ let
     "5f90cc144722d859b5eff64fc7883e34" = "laptop";
     "f625c25ec3042336db5fe1d4b821deb6" = "workstation";
   };
-in { config, pkgs, ... }:
-let
-  dodPki = pkgs.fetchzip {
-    url =
-      "https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-10_wcf.zip";
-    sha256 = "1sjkgbpi0d032xgnhx1zi1liqmaxwln8vr2kf512hnq1izk19vcq";
-  };
-in {
-  imports = [
-    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    (./. + "/${systemName}.nix")
-  ];
-
-  #############################
-  ######## Filesystems ########
-  #############################
-
-  fileSystems = {
-    "/" = {
-      label = "nixos";
-      fsType = "btrfs";
-      options = [ "compress=lzo,discard,noatime,subvol=@" ];
+in
+{ config, pkgs, ... }:
+  let
+    dodPki = pkgs.fetchzip {
+      url =
+        "https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-10_wcf.zip";
+      sha256 = "1sjkgbpi0d032xgnhx1zi1liqmaxwln8vr2kf512hnq1izk19vcq";
     };
+  in
+    {
+      imports = [
+        <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+        (./. + "/${systemName}.nix")
+      ];
 
-    "/home" = {
-      label = "nixos";
-      fsType = "btrfs";
-      options = [ "compress=lzo,discard,noatime,subvol=@home" ];
-    };
+      nix = {
+        package = pkgs.nixFlakes;
+        extraOptions = ''
+          experimental-features = nix-command flakes
+        '';
+      };
 
-    "/nix" = {
-      label = "nixos";
-      fsType = "btrfs";
-      options = [ "compress=lzo,discard,noatime,subvol=@nix" ];
-    };
+      #############################
+      ######## Filesystems ########
+      #############################
 
-    "/boot" = {
-      label = "boot";
-      fsType = "vfat";
-    };
-  };
+      fileSystems = {
+        "/" = {
+          label = "nixos";
+          fsType = "btrfs";
+          options = [ "compress=lzo,discard,noatime,subvol=@" ];
+        };
 
-  boot = {
-    supportedFilesystems = [ "btrfs" ];
-    initrd.supportedFilesystems = [ "btrfs" ];
-    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
-    extraModprobeConfig = ''
-      options v4l2loopback exclusive_caps=1
-    '';
-    binfmt.emulatedSystems = [ "aarch64-linux" ];
-  };
+        "/home" = {
+          label = "nixos";
+          fsType = "btrfs";
+          options = [ "compress=lzo,discard,noatime,subvol=@home" ];
+        };
 
-  ####################################
-  ######## User Configuration ########
-  ####################################
+        "/nix" = {
+          label = "nixos";
+          fsType = "btrfs";
+          options = [ "compress=lzo,discard,noatime,subvol=@nix" ];
+        };
 
-  users.users.gcoakes = {
-    shell = pkgs.zsh;
-    createHome = true;
-    isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
-    openssh.authorizedKeys.keyFiles =
-      [ ./ssh-laptop.pub ./ssh-workstation.pub ];
-  };
+        "/boot" = {
+          label = "boot";
+          fsType = "vfat";
+        };
+      };
 
-  programs.adb.enable = true;
+      boot = {
+        supportedFilesystems = [ "btrfs" ];
+        initrd.supportedFilesystems = [ "btrfs" ];
+        extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+        extraModprobeConfig = ''
+          options v4l2loopback exclusive_caps=1
+        '';
+        binfmt.emulatedSystems = [ "aarch64-linux" ];
+      };
 
-  ##########################
-  ######## Serivces ########
-  ##########################
+      ####################################
+      ######## User Configuration ########
+      ####################################
 
-  # Allow yubikeys to be accessible.
-  services.udev.packages = with pkgs; [
-    android-udev-rules
-    yubikey-personalization
-    ledger-udev-rules
-  ];
+      users.users.gcoakes = {
+        shell = pkgs.zsh;
+        createHome = true;
+        isNormalUser = true;
+        extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
+        openssh.authorizedKeys.keyFiles =
+          [ ./ssh-laptop.pub ./ssh-workstation.pub ];
+      };
 
-  # Enable using smart cards.
-  services.pcscd.enable = true;
+      programs.adb.enable = true;
 
-  # Enable ssh connections from my smart card.
-  services.openssh = {
-    enable = true;
-    passwordAuthentication = false;
-    challengeResponseAuthentication = false;
-    permitRootLogin = "no";
-    ports = [ 2222 ];
-  };
+      ##########################
+      ######## Serivces ########
+      ##########################
 
-  services.ipfs = {
-    enable = true;
-    dataDir = "/var/lib/ipfs";
-    autoMount = true;
-    enableGC = true;
-    extraFlags = [ "--enable-pubsub-experiment" ];
-    extraConfig.Pubsub = {
-      Router = "gossipsub";
-      DisableSigning = false;
-    };
-  };
+      # Allow yubikeys to be accessible.
+      services.udev.packages = with pkgs; [
+        android-udev-rules
+        yubikey-personalization
+        ledger-udev-rules
+      ];
 
-  services.flatpak.enable = true;
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
+      # Enable using smart cards.
+      services.pcscd.enable = true;
 
-  virtualisation.docker.enable = true;
+      # Enable ssh connections from my smart card.
+      services.openssh = {
+        enable = true;
+        passwordAuthentication = false;
+        challengeResponseAuthentication = false;
+        permitRootLogin = "no";
+        ports = [ 2222 ];
+      };
 
-  #########################
-  ######## Desktop ########
-  #########################
+      services.ipfs = {
+        enable = true;
+        dataDir = "/var/lib/ipfs";
+        autoMount = true;
+        enableGC = true;
+        extraFlags = [ "--enable-pubsub-experiment" ];
+        extraConfig.Pubsub = {
+          Router = "gossipsub";
+          DisableSigning = false;
+        };
+      };
 
-  sound.enable = true;
+      services.flatpak.enable = true;
+      xdg.portal = {
+        enable = true;
+        extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      };
 
-  hardware.opengl.driSupport32Bit = true;
-  hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
+      virtualisation.docker.enable = true;
 
-  fonts = {
-    fontconfig = {
-      enable = true;
-      defaultFonts.monospace = [ "Hasklug Nerd Font Complete" ];
-    };
-    fonts = [ (pkgs.nerdfonts.override { fonts = [ "Hasklig" ]; }) ];
-  };
+      #########################
+      ######## Desktop ########
+      #########################
 
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome3.enable = true;
-    videoDrivers = [ "amdgpu" "radeon" ];
-    layout = "us";
-    libinput = {
-      enable = true;
-      accelProfile = "flat";
-      accelSpeed = "0";
-    };
-  };
+      sound.enable = true;
 
-  environment.gnome3.excludePackages = with pkgs.gnome3; [
-    epiphany
-    geary
-    gedit
-    gnome-terminal
-    seahorse
-    yelp
-  ];
+      hardware.opengl.driSupport32Bit = true;
+      hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
 
-  programs.gnupg.agent.pinentryFlavor = "gnome";
+      fonts = {
+        fontconfig = {
+          enable = true;
+          defaultFonts.monospace = [ "Hasklug Nerd Font Complete" ];
+        };
+        fonts = [ (pkgs.nerdfonts.override { fonts = [ "Hasklig" ]; }) ];
+      };
 
-  programs.dconf.enable = true;
+      # Enable the X11 windowing system.
+      services.xserver = {
+        enable = true;
+        displayManager.gdm.enable = true;
+        desktopManager.gnome3.enable = true;
+        videoDrivers = [ "amdgpu" "radeon" ];
+        layout = "us";
+        libinput = {
+          enable = true;
+          mouse = {
+            accelProfile = "flat";
+            accelSpeed = "0";
+          };
+        };
+      };
 
-  security.chromiumSuidSandbox.enable = true;
+      environment.gnome3.excludePackages = with pkgs.gnome3; [
+        epiphany
+        geary
+        gedit
+        gnome-terminal
+        seahorse
+        yelp
+      ];
 
-  ######################
-  ######## Misc ########
-  ######################
+      programs.gnupg.agent.pinentryFlavor = "gnome";
 
-  nixpkgs.config.allowUnfree = true;
-  time.timeZone = "US/Central";
+      programs.dconf.enable = true;
 
-  security.pki.certificates =
-    [ (builtins.readFile "${dodPki}/DoD_PKE_CA_chain.pem") ];
+      security.chromiumSuidSandbox.enable = true;
 
-  ###########################################
-  ######## System Package Management ########
-  ###########################################
+      ######################
+      ######## Misc ########
+      ######################
 
-  environment.systemPackages = with pkgs; [ git cachix vulkan-loader ];
+      nixpkgs.config.allowUnfree = true;
+      time.timeZone = "US/Central";
 
-  system = { autoUpgrade.enable = true; };
-  nix.gc.automatic = true;
+      security.pki.certificates =
+        [ (builtins.readFile "${dodPki}/DoD_PKE_CA_chain.pem") ];
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "20.09";
+      ###########################################
+      ######## System Package Management ########
+      ###########################################
 
-  ########################################
-  ######## Hardware Configuration ########
-  ########################################
+      environment.systemPackages = with pkgs; [ git cachix vulkan-loader ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+      system = { autoUpgrade.enable = true; };
+      nix.gc.automatic = true;
 
-  networking.networkmanager.enable = true;
-  networking.hostName = systemName;
+      # This value determines the NixOS release with which your system is to be
+      # compatible, in order to avoid breaking some software such as database
+      # servers. You should change this only after NixOS release notes say you
+      # should.
+      system.stateVersion = "21.05";
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
+      ########################################
+      ######## Hardware Configuration ########
+      ########################################
 
-  hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
-  hardware.pulseaudio = {
-    enable = true;
-    support32Bit = true;
-    package = pkgs.pulseaudioFull;
-    configFile = pkgs.runCommand "default.pa" { } ''
-      sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
-          ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
-      echo 'load-module module-bluetooth-policy' >> $out
-      echo 'load-module module-bluetooth-discover' >> $out
-    '';
-  };
+      # Use the systemd-boot EFI boot loader.
+      boot.loader.systemd-boot.enable = true;
+      boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.kernelPackages = pkgs.linuxPackages;
-}
+      networking.networkmanager.enable = true;
+      networking.hostName = systemName;
+
+      # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+      # Per-interface useDHCP will be mandatory in the future, so this generated config
+      # replicates the default behaviour.
+      networking.useDHCP = false;
+
+      hardware.bluetooth.enable = true;
+      services.blueman.enable = true;
+      hardware.pulseaudio = {
+        enable = true;
+        support32Bit = true;
+        package = pkgs.pulseaudioFull;
+        configFile = pkgs.runCommand "default.pa" {} ''
+          sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
+              ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+          echo 'load-module module-bluetooth-policy' >> $out
+          echo 'load-module module-bluetooth-discover' >> $out
+        '';
+      };
+
+      boot.kernelPackages = pkgs.linuxPackages;
+    }
