@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }: {
   virtualisation.libvirtd.enable = true;
 
+  networking.hostName = "workstation";
   networking.interfaces.enp7s0.useDHCP = true;
   networking.interfaces.wlp6s0.useDHCP = true;
 

@@ -1,0 +1,29 @@
+{
+    "coc.preferences.formatOnSaveFiletypes": ["python", "rust", "nix", "javascript", "typescript"],
+    "coc.preferences.useTmuxTerminal": true,
+    "codeLens.enable": true,
+    "rust-analyzer.server.path": "rust-analyzer",
+    "languageserver": {
+        "clangd": {
+            "command": "clangd",
+            "rootPatterns": [
+                "compile_flags.txt",
+                "compile_commands.json"
+            ],
+            "filetypes": [
+                "c",
+                "cc",
+                "cpp",
+                "c++",
+                "objc",
+                "objcpp"
+            ]
+        },
+        "nix": {
+            "command": "rnix-lsp",
+            "filetypes": [
+                "nix"
+            ]
+        }
+    }
+}
