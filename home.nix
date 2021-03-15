@@ -268,7 +268,7 @@ in
         package = sauceFont;
       };
       settings = {
-        font_size = if hasBattery then "11.0" else "14.0";
+        font_size = if hasBattery then "11.0" else "12.0";
         enable_audio_bell = "no";
       };
       extraConfig = ''
