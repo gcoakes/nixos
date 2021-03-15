@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }: {
   services.xserver = {
-    videoDrivers = [ "amdgpu" "radeon" ];
     libinput = {
       enable = true;
       calibrationMatrix = "2.4 0 0 0 2.4 0 0 0 1";
