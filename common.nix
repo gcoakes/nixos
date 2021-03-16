@@ -6,11 +6,7 @@ with builtins;
 
   users.users.gcoakes = {
     shell = pkgs.zsh;
-    createHome = true;
     isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
-    openssh.authorizedKeys.keyFiles =
-      [ ./ssh-laptop.pub ./ssh-workstation.pub ];
   };
 
   ###########################################

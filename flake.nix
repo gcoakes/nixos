@@ -64,6 +64,8 @@
             ./common.nix
             home-manager.nixosModules.home-manager
             {
+              boot.wsl.enable = true;
+              boot.wsl.user = "gcoakes";
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.gcoakes = import ./wsl-home.nix;

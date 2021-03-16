@@ -1,5 +1,15 @@
 with builtins;
 { config, pkgs, inputs, ... }: {
+  ####################################
+  ######## User Configuration ########
+  ####################################
+
+  users.users.gcoakes = {
+    extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
+    openssh.authorizedKeys.keyFiles =
+      [ ./ssh-laptop.pub ./ssh-workstation.pub ];
+  };
+
   #############################
   ######## Filesystems ########
   #############################
