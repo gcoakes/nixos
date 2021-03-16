@@ -1,14 +1,5 @@
 with builtins;
 { pkgs, ... }: {
-  ####################################
-  ######## User Configuration ########
-  ####################################
-
-  users.users.gcoakes = {
-    shell = pkgs.zsh;
-    isNormalUser = true;
-  };
-
   ###########################################
   ######## System Package Management ########
   ###########################################

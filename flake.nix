@@ -30,15 +30,11 @@
   };
   outputs = { self, nixpkgs, home-manager, flake-utils, nixos-wsl, ... }@inputs:
     let
-      homeModules = [
+      systemModules = [
+        ./common.nix
+        ./system.nix
         home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.gcoakes = import ./home.nix inputs;
-        }
       ];
-      allModules = [ ./common.nix ./system.nix ] ++ homeModules;
     in
       {
         overlays = with builtins; listToAttrs (
@@ -50,30 +46,19 @@
         nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           extraArgs = { inherit inputs; };
-          modules = allModules ++ [ ./workstation.nix ];
+          modules = systemModules ++ [ ./workstation.nix ];
         };
         nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           extraArgs = { inherit inputs; };
-          modules = allModules ++ [ ./laptop.nix ];
+          modules = systemModules ++ [ ./laptop.nix ];
         };
         nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          extraArgs = { inherit inputs; };
           modules = nixos-wsl.nixosModules ++ [
             ./common.nix
             home-manager.nixosModules.home-manager
-            {
-              boot.wsl.enable = true;
-              boot.wsl.user = "gcoakes";
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.gcoakes = import ./wsl-home.nix;
-              networking.proxy = {
-                default = "http://proxy-chain.intel.com:911";
-                noProxy = "127.0.0.1,::1,localhost,.localdomain,.intel.com";
-              };
-            }
+            ./wsl-system.nix
           ];
         };
       } // flake-utils.lib.eachDefaultSystem

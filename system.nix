@@ -5,10 +5,15 @@ with builtins;
   ####################################
 
   users.users.gcoakes = {
+    shell = pkgs.zsh;
+    isNormalUser = true;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
     openssh.authorizedKeys.keyFiles =
       [ ./ssh-laptop.pub ./ssh-workstation.pub ];
   };
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.users.gcoakes = import ./home.nix inputs;
 
   #############################
   ######## Filesystems ########

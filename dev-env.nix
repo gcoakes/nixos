@@ -40,6 +40,9 @@ in
   home.packages = with pkgs; [
     editor
     nnnNerd
+    poetry
+    (python27.withPackages (ps: with ps; [virtualenv]))
+    python36
     tnvr
   ];
   home.sessionVariables = { EDITOR = "nvim"; };
@@ -88,6 +91,7 @@ in
         coc-json
         coc-nvim
         coc-pairs
+        coc-pyright
         coc-rust-analyzer
         coc-spell-checker
         coc-tsserver
