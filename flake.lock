@@ -29,6 +29,21 @@
         "url": "https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-10_wcf.zip"
       }
     },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1614513358,
+        "narHash": "sha256-LakhOx3S1dRjnh0b5Dg3mbZyH0ToC9I8Y2wKSkBaTzU=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "5466c5bbece17adaab2d82fae80b46e807611bf3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -81,6 +96,30 @@
         "type": "github"
       }
     },
+    "nixos-wsl": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1615868397,
+        "narHash": "sha256-5FGemd68NHibGbmlUXa4gq6J86zsq1SCdjS5CbSg/lU=",
+        "owner": "gcoakes",
+        "repo": "NixOS-WSL",
+        "rev": "f538d06bdb7bb65af932ab925fb53dedfef85ebe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gcoakes",
+        "ref": "modularize",
+        "repo": "NixOS-WSL",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1615532953,
@@ -101,9 +140,11 @@
       "inputs": {
         "coc.nvim": "coc.nvim",
         "dod-pki": "dod-pki",
+        "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "kitty-themes": "kitty-themes",
         "lutris-skyrimse-installers": "lutris-skyrimse-installers",
+        "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs"
       }
     }

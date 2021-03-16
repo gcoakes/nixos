@@ -5,6 +5,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-utils.url = "github:numtide/flake-utils";
+    nixos-wsl = {
+      url = "github:gcoakes/NixOS-WSL/modularize";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     "coc.nvim" = {
       url = "github:gcoakes/coc.nvim/release";
       flake = false;
@@ -22,10 +28,9 @@
       flake = false;
     };
   };
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, flake-utils, nixos-wsl, ... }@inputs:
     let
-      commonModules = [
-        ./common.nix
+      homeModules = [
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
@@ -33,6 +38,7 @@
           home-manager.users.gcoakes = import ./home.nix inputs;
         }
       ];
+      allModules = [ ./common.nix ./system.nix ] ++ homeModules;
     in
       {
         overlays = with builtins; listToAttrs (
@@ -44,12 +50,46 @@
         nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           extraArgs = { inherit inputs; };
-          modules = commonModules ++ [ ./workstation.nix ];
+          modules = allModules ++ [ ./workstation.nix ];
         };
         nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           extraArgs = { inherit inputs; };
-          modules = commonModules ++ [ ./laptop.nix ];
+          modules = allModules ++ [ ./laptop.nix ];
         };
-      };
+        nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          extraArgs = { inherit inputs; };
+          modules = nixos-wsl.nixosModules ++ [
+            ./common.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.gcoakes = import ./wsl-home.nix;
+              networking.proxy = {
+                default = "http://proxy-chain.intel.com:911";
+                noProxy = "127.0.0.1,::1,localhost,.localdomain,.intel.com";
+              };
+            }
+          ];
+        };
+      } // flake-utils.lib.eachDefaultSystem
+        (
+          system:
+            let
+              pkgs = import nixpkgs { inherit system; };
+            in
+              {
+                checks.check-format = pkgs.runCommand "check-format"
+                  { buildInputs = with pkgs; [ nixpkgs-fmt ]; } ''
+                  nixpkgs-fmt --check ${./.}
+                  mkdir $out # success
+                '';
+
+                devShell = pkgs.mkShell {
+                  nativeBuildInputs = with pkgs; [ nixpkgs-fmt ];
+                };
+              }
+        );
 }
