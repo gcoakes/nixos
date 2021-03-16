@@ -161,7 +161,6 @@ in
         if [ -n "$TMUX" ]; then
           export NVIM_LISTEN_ADDRESS="${"$"}{XDG_RUNTIME_DIR-/tmp}/tmux-nvim-${"$"}{TMUX##*,}"
           export EDITOR="${tnvr} -s"
-          alias nvim="${tnvr} -s"
         fi
         function editor() {
           tmuxp load default
