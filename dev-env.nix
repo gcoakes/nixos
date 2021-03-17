@@ -39,9 +39,10 @@ in
 {
   home.packages = with pkgs; [
     editor
+    git-review
     nnnNerd
     poetry
-    (python27.withPackages (ps: with ps; [virtualenv]))
+    (python27.withPackages (ps: with ps; [ virtualenv ]))
     python36
     tnvr
   ];
