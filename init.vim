@@ -84,6 +84,10 @@ vnoremap <Tab> >
 vnoremap <S-Tab> <
 nnoremap <Tab> gv>
 nnoremap <S-Tab> gv<
+noremap <C-w>- <cmd>vert resize -10<CR>
+noremap <C-w>+ <cmd>vert resize +10<CR>
+noremap <C-w>< <cmd>vert resize -10<CR>
+noremap <C-w>> <cmd>vert resize +10<CR>
 nnoremap gb :Buffers<CR>
 
 let g:lightline = {
