@@ -1,6 +1,9 @@
-{ pkgs, ... }: {
-  boot.wsl.enable = true;
-  boot.wsl.user = "oakesgrx";
+{ pkgs, lib, ... }: {
+  boot.wsl = {
+    enable = true;
+    user = "oakesgrx";
+    etcNixos = lib.cleanSource ./.;
+  };
   users.users.oakesgrx = {
     shell = pkgs.zsh;
     isNormalUser = true;
