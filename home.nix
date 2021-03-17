@@ -52,7 +52,7 @@ let
   };
 in
 {
-  imports = [ (import ./dev-env.nix "gregcoakes@gmail.com") ];
+  imports = [ (import ./dev-env.nix { email = "gregcoakes@gmail.com"; inherit inputs; }) ];
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.

@@ -11,6 +11,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    fzf-fish = {
+      url = "github:PatrickF1/fzf.fish";
+      flake = false;
+    };
+    theme-agnoster = {
+      url = "github:oh-my-fish/theme-agnoster";
+      flake = false;
+    };
     "coc.nvim" = {
       url = "github:gcoakes/coc.nvim/release";
       flake = false;

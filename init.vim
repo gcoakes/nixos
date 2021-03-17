@@ -1,3 +1,4 @@
+set shell=sh
 set nobackup nowritebackup noswapfile
 set noshowmode
 set expandtab shiftwidth=4 smartindent tabstop=4

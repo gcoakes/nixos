@@ -1,5 +1,5 @@
-{ ... }: {
-  imports = [ (import ./dev-env.nix "gregoryx.oakes@intel.com") ];
+{ inputs, ... }: {
+  imports = [ (import ./dev-env.nix { email = "gregoryx.oakes@intel.com"; inherit inputs; }) ];
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.

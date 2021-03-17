@@ -5,7 +5,7 @@ with builtins;
   ####################################
 
   users.users.gcoakes = {
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
     openssh.authorizedKeys.keyFiles =
