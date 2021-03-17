@@ -1,7 +1,7 @@
 { email, inputs }:
 { config, pkgs, lib, nixosConfig, ... }:
 let
-  toggle-tmux-pane = with pkgs; writeScript "toggle-tmux-pane" ''
+  toggle-tmux-pane = with pkgs; writeShellScript "toggle-tmux-pane" ''
     name="$1"
     shift
     P="$(tmux show -wv "@$name")"
@@ -12,14 +12,14 @@ let
       ${tmux}/bin/tmux set -wu "@$name"
     fi
   '';
-  sidebar = with pkgs; writeScript "sidebar" ''
+  sidebar = with pkgs; writeShellScript "sidebar" ''
     window_id="$(tmux list-panes -F '#{window_id}' | head -n1)"
     export NVIM_LISTEN_ADDRESS="${"$"}{XDG_RUNTIME_DIR-/tmp}/tmux-nvim-$window_id"
     export NNN_OPENER="${tnvr}"
     exec ${nnnNerd}/bin/nnn -c $@
   '';
   nnnNerd = pkgs.nnn.override { withNerdIcons = true; };
-  tnvr = with pkgs; writeScriptBin "tnvr" ''
+  tnvr = with pkgs; writeShellScriptBin "tnvr" ''
     if [ -n "$TMUX" ]; then
       pane_id="$(${neovim-remote}/bin/nvr --nostart -s --remote-expr 'get(environ(), "TMUX_PANE")')"
       if [ -n "$pane_id" ]; then
@@ -28,7 +28,7 @@ let
     fi
     exec ${neovim-remote}/bin/nvr $@
   '';
-  editor = with pkgs; writeScriptBin "editor" ''
+  editor = with pkgs; writeShellScriptBin "editor" ''
     if [ -n "$1" ]; then
       cd "$1" && exec tmuxp load default
     else

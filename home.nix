@@ -23,7 +23,7 @@ let
     sha256 = "12g7q1lkkawmswh3xa6lq1cjyxcdck2yvq2xipcrh1lq2s8g0xsp";
   };
   windows-vm = with pkgs;
-    writeScriptBin "windows-vm" ''
+    writeShellScriptBin "windows-vm" ''
       exec ${qemu_kvm}/bin/qemu-kvm \
         -cpu host \
         -drive file=/mnt/data/qemu/images/win10.qcow2 \
@@ -35,7 +35,7 @@ let
         $@
     '';
   mo2-handler = with pkgs;
-    writeScriptBin "modorganizer2-nxm-broker.sh" (
+    writeShellScriptBin "modorganizer2-nxm-broker.sh" (
       builtins.readFile
         "${inputs.lutris-skyrimse-installers}/handlers/modorganizer2-nxm-broker.sh"
     );
