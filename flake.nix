@@ -11,8 +11,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    fzf-fish = {
-      url = "github:PatrickF1/fzf.fish";
+    dracula-sublime = {
+      url = "github:dracula/sublime";
       flake = false;
     };
     theme-agnoster = {

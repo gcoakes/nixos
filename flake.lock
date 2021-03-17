@@ -29,6 +29,22 @@
         "url": "https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-10_wcf.zip"
       }
     },
+    "dracula-sublime": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1598246102,
+        "narHash": "sha256-XAwxdmhI6aV7CUnWaR80BzKbESb82cvu9mvsjp7a3Kw=",
+        "owner": "dracula",
+        "repo": "sublime",
+        "rev": "c2de0acf5af67042393cf70de68013153c043656",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "sublime",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1614513358,
@@ -41,22 +57,6 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "fzf-fish": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1615702803,
-        "narHash": "sha256-Z4Zm0cN1CceckVrNv+y7huX4W9yB6+tLui5ehZjc5FU=",
-        "owner": "PatrickF1",
-        "repo": "fzf.fish",
-        "rev": "85c079efbcb2de8532026ec86acb268a4c36f603",
-        "type": "github"
-      },
-      "original": {
-        "owner": "PatrickF1",
-        "repo": "fzf.fish",
         "type": "github"
       }
     },
@@ -156,8 +156,8 @@
       "inputs": {
         "coc.nvim": "coc.nvim",
         "dod-pki": "dod-pki",
+        "dracula-sublime": "dracula-sublime",
         "flake-utils": "flake-utils",
-        "fzf-fish": "fzf-fish",
         "home-manager": "home-manager",
         "kitty-themes": "kitty-themes",
         "lutris-skyrimse-installers": "lutris-skyrimse-installers",

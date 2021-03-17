@@ -39,7 +39,6 @@ in
 {
   home.packages = with pkgs; [
     editor
-    fzf
     git-review
     nnnNerd
     poetry
@@ -60,15 +59,18 @@ in
         end
       '';
       plugins = [
-        { name = "fzf.fish"; src = inputs.fzf-fish; }
         { name = "theme-agnoster"; src = inputs.theme-agnoster; }
       ];
+    };
+    fzf = {
+      enable = true;
+      enableFishIntegration = true;
     };
     git = {
       enable = true;
       userEmail = email;
       userName = "Gregory C. Oakes";
-      ignores = [ ".direnv/" ];
+      ignores = [ ".direnv/" "coc-settings.json" ];
       delta.enable = true;
       extraConfig.core.editor = "${tnvr}/bin/tnvr --remote-wait-silent -s";
     };
@@ -147,6 +149,14 @@ in
     lsd = {
       enable = true;
       enableAliases = true;
+    };
+    bat = {
+      enable = true;
+      config = {
+        pager = "less -FR";
+        theme = "Dracula";
+      };
+      themes.dracula = inputs.dracula-sublime + "/Dracula.tmTheme";
     };
   };
   xdg = {
