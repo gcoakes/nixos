@@ -1,10 +1,11 @@
 with builtins;
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
   ###########################################
   ######## System Package Management ########
   ###########################################
 
   nix.gc.automatic = true;
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
