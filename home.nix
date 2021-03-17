@@ -97,7 +97,6 @@ in
       pavucontrol
       protontricks
       psm
-      python3
       sauceFont
       spotify
       steam
