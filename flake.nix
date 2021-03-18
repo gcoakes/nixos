@@ -61,6 +61,10 @@
           extraArgs = { inherit inputs; };
           modules = systemModules ++ [ ./laptop.nix ];
         };
+        nixosConfigurations.pi = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [ ./pi.nix ];
+        };
         nixosConfigurations.nixos-wsl = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           extraArgs = { inherit inputs; };
