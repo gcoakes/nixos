@@ -30,10 +30,12 @@ let
   '';
   editor = with pkgs; writeShellScriptBin "editor" ''
     if [ -n "$1" ]; then
-      cd "$1" && exec tmuxp load default
-    else
-      exec tmuxp load default
+      cd "$1" || exit 1
     fi
+    if [ -f .envrc ]; then
+      direnv allow || exit 2
+    fi
+    exec tmuxp load default
   '';
 in
 {
