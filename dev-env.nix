@@ -74,7 +74,10 @@ in
       userName = "Gregory C. Oakes";
       ignores = [ ".direnv/" "coc-settings.json" ];
       delta.enable = true;
-      extraConfig.core.editor = "${tnvr}/bin/tnvr --remote-wait-silent -s";
+      extraConfig = {
+        core.editor = "${tnvr}/bin/tnvr --remote-wait-silent -s";
+        init.defaultBranch = "main";
+      };
     };
     direnv = {
       enable = true;
@@ -179,25 +182,6 @@ in
         | ${pkgs.moreutils}/bin/sponge "$coc_settings"
         fi
       '';
-    };
-    configFile."tmuxp/nix.json".text = builtins.toJSON {
-      windows = [
-        {
-          panes = [
-            {
-              shell_command = "while true; nvim; end";
-              focus = true;
-            }
-            {}
-          ];
-          layout = "main-horizontal";
-          options.main-pane-height = 40;
-          focus = true;
-          window_name = "nix";
-        }
-      ];
-      session_name = "nix";
-      start_directory = "/etc/nixos";
     };
     configFile."tmuxp/default.json".text = builtins.toJSON {
       windows = [
