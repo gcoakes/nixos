@@ -35,7 +35,7 @@ let
     if [ -f .envrc ]; then
       direnv allow || exit 2
     fi
-    exec tmuxp load default
+    exec tmuxp load -a default
   '';
 in
 {
@@ -143,6 +143,8 @@ in
         set -g status-left '#{?client_prefix,#[fg=#282a36]#[bg=#ff79c6] ,}'
         set -ga status-left '#[bg=#44475a]#[fg=#ff79c6] #{?window_zoomed_flag, ↕ , }'
         set -g status-right '#[fg=#bd93f9,bg=#44475a]#[fg=#f8f8f2,bg=#bd93f9] %a %H:%M:%S #[fg=#6272a4]%Y-%m-%d '
+        set -g automatic-rename on
+        set -g automatic-rename-format '#{s|([^/])[^/]*/|\1/|g:pane_current_path}'
 
         setw -g mouse
         bind C-q kill-session
@@ -196,7 +198,6 @@ in
           layout = "main-horizontal";
           options.main-pane-height = 40;
           focus = true;
-          window_name = "editor";
         }
       ];
       session_name = "\${PWD}";
