@@ -19,10 +19,6 @@
       url = "github:oh-my-fish/theme-agnoster";
       flake = false;
     };
-    "coc.nvim" = {
-      url = "github:gcoakes/coc.nvim/release";
-      flake = false;
-    };
     kitty-themes = {
       url = "github:dexpota/kitty-themes";
       flake = false;
@@ -45,12 +41,6 @@
       ];
     in
     {
-      overlays = with builtins; listToAttrs (
-        map
-          (n: { name = elemAt (split "\\.nix" n) 0; value = import (./overlays + "/${n}") inputs; })
-          (filter (n: match ".*\\.nix" n != null) (attrNames (readDir ./overlays)))
-      );
-
       nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         extraArgs = { inherit inputs; };

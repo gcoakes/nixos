@@ -1,22 +1,5 @@
 {
   "nodes": {
-    "coc.nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1615615658,
-        "narHash": "sha256-VC+8gka5Uz4AdIybZcyOkPdPEpC0TjYLlo/QvMjGlmY=",
-        "owner": "gcoakes",
-        "repo": "coc.nvim",
-        "rev": "7133e7d4ef64799d7bc5c607a6e4074460c21765",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gcoakes",
-        "ref": "release",
-        "repo": "coc.nvim",
-        "type": "github"
-      }
-    },
     "dod-pki": {
       "flake": false,
       "locked": {
@@ -154,7 +137,6 @@
     },
     "root": {
       "inputs": {
-        "coc.nvim": "coc.nvim",
         "dod-pki": "dod-pki",
         "dracula-sublime": "dracula-sublime",
         "flake-utils": "flake-utils",

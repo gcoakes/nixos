@@ -93,6 +93,7 @@ in
       withNodeJs = true;
       extraConfig = builtins.readFile ./init.vim;
       plugins = with pkgs.vimPlugins; [
+        coc-clangd
         coc-css
         coc-eslint
         coc-fzf
@@ -117,7 +118,6 @@ in
       ];
       extraPackages = with pkgs; [
         bat
-        clang-tools
         fzf
         ripgrep
         rnix-lsp
@@ -175,14 +175,13 @@ in
       # by the pure ones.
       onChange = ''
         config_dir="${"$"}{XDG_CONFIG_HOME-$HOME/.config}/nvim"
-          coc_settings="$config_dir/coc-settings.json"
+        coc_settings="$config_dir/coc-settings.json"
         nix_settings="$config_dir/nix-coc-settings.json"
-        if [ -f "$coc_settings" ];
-        then
-        ${pkgs.coreutils}/bin/cp -L "$nix_settings" "$coc_settings"
+        if [ -f "$coc_settings" ]; then
+          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' "$coc_settings" "$nix_settings" \
+          | ${pkgs.moreutils}/bin/sponge "$coc_settings"
         else
-        ${pkgs.jq}/bin/jq -s '.[0] * .[1]' "$coc_settings" "$nix_settings" \
-        | ${pkgs.moreutils}/bin/sponge "$coc_settings"
+          ${pkgs.coreutils}/bin/cp -L "$nix_settings" "$coc_settings"
         fi
       '';
     };
