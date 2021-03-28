@@ -110,6 +110,7 @@ in
         fugitive
         fzf-vim
         lightline-vim
+        (pkgs.vimUtils.buildVimPlugin { name = "vim-licenses"; src = inputs.vim-licenses; })
         vim-nix
         vim-rooter
         vista-vim

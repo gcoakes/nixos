@@ -163,7 +163,8 @@
         "lutris-skyrimse-installers": "lutris-skyrimse-installers",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
-        "theme-agnoster": "theme-agnoster"
+        "theme-agnoster": "theme-agnoster",
+        "vim-licenses": "vim-licenses"
       }
     },
     "theme-agnoster": {
@@ -179,6 +180,22 @@
       "original": {
         "owner": "oh-my-fish",
         "repo": "theme-agnoster",
+        "type": "github"
+      }
+    },
+    "vim-licenses": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1591704951,
+        "narHash": "sha256-Xg1mD3FbNw5/u3z5uJ4v5xePI9ygyO2EhGcdZd50hss=",
+        "owner": "antoyo",
+        "repo": "vim-licenses",
+        "rev": "63a7c392352a2b834e1fd8d78f2b5b6d3e1f37bc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "antoyo",
+        "repo": "vim-licenses",
         "type": "github"
       }
     }
