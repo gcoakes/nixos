@@ -2,10 +2,10 @@
   services.xserver = {
     libinput = {
       enable = true;
-      calibrationMatrix = "2.4 0 0 0 2.4 0 0 0 1";
-      accelProfile = "flat";
-      tapping = true;
-      dev = "/dev/input/event14";
+      touchpad = {
+        accelProfile = "flat";
+        tapping = true;
+      };
     };
   };
 
