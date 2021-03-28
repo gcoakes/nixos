@@ -31,6 +31,10 @@
       url = "https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-10_wcf.zip";
       flake = false;
     };
+    vim-licenses = {
+      url = github:antoyo/vim-licenses;
+      flake = false;
+    };
   };
   outputs = { self, nixpkgs, home-manager, flake-utils, nixos-wsl, ... }@inputs:
     let
