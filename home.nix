@@ -108,7 +108,7 @@ in
       yarn
       zip
       zstd
-    ] ++ (if hasBattery then [] else [ windows-vm ]);
+    ] ++ (if hasBattery then [ ] else [ windows-vm ]);
 
   programs = {
     gpg.enable = true;

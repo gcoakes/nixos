@@ -44,53 +44,53 @@
         home-manager.nixosModules.home-manager
       ];
     in
-      {
-        overlays = with builtins; listToAttrs (
-          map
-            (n: { name = elemAt (split "\\.nix" n) 0; value = import (./overlays + "/${n}") inputs; })
-            (filter (n: match ".*\\.nix" n != null) (attrNames (readDir ./overlays)))
-        );
+    {
+      overlays = with builtins; listToAttrs (
+        map
+          (n: { name = elemAt (split "\\.nix" n) 0; value = import (./overlays + "/${n}") inputs; })
+          (filter (n: match ".*\\.nix" n != null) (attrNames (readDir ./overlays)))
+      );
 
-        nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          extraArgs = { inherit inputs; };
-          modules = systemModules ++ [ ./workstation.nix ];
-        };
-        nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          extraArgs = { inherit inputs; };
-          modules = systemModules ++ [ ./laptop.nix ];
-        };
-        nixosConfigurations.pi = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          modules = [ ./pi.nix ];
-        };
-        nixosConfigurations.nixos-wsl = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          extraArgs = { inherit inputs; };
-          modules = [
-            nixos-wsl.nixosModule
-            ./common.nix
-            home-manager.nixosModules.home-manager
-            ./wsl-system.nix
-          ];
-        };
-      } // flake-utils.lib.eachDefaultSystem
-        (
-          system:
-            let
-              pkgs = import nixpkgs { inherit system; };
-            in
-              {
-                checks.check-format = pkgs.runCommand "check-format"
-                  { buildInputs = with pkgs; [ nixpkgs-fmt ]; } ''
-                  nixpkgs-fmt --check ${./.}
-                  mkdir $out # success
-                '';
+      nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        extraArgs = { inherit inputs; };
+        modules = systemModules ++ [ ./workstation.nix ];
+      };
+      nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        extraArgs = { inherit inputs; };
+        modules = systemModules ++ [ ./laptop.nix ];
+      };
+      nixosConfigurations.pi = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        modules = [ ./pi.nix ];
+      };
+      nixosConfigurations.nixos-wsl = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        extraArgs = { inherit inputs; };
+        modules = [
+          nixos-wsl.nixosModule
+          ./common.nix
+          home-manager.nixosModules.home-manager
+          ./wsl-system.nix
+        ];
+      };
+    } // flake-utils.lib.eachDefaultSystem
+      (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          checks.check-format = pkgs.runCommand "check-format"
+            { buildInputs = with pkgs; [ nixpkgs-fmt ]; } ''
+            nixpkgs-fmt --check ${./.}
+            mkdir $out # success
+          '';
 
-                devShell = pkgs.mkShell {
-                  nativeBuildInputs = with pkgs; [ nixpkgs-fmt ];
-                };
-              }
-        );
+          devShell = pkgs.mkShell {
+            nativeBuildInputs = with pkgs; [ nixpkgs-fmt ];
+          };
+        }
+      );
 }

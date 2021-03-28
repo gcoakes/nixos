@@ -181,7 +181,7 @@ with builtins;
     enable = true;
     support32Bit = true;
     package = pkgs.pulseaudioFull;
-    configFile = pkgs.runCommand "default.pa" {} ''
+    configFile = pkgs.runCommand "default.pa" { } ''
       sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
           ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
       echo 'load-module module-bluetooth-policy' >> $out

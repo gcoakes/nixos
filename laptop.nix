@@ -13,13 +13,13 @@
   networking.dhcpcd.wait = "background";
   networking.interfaces.wlp2s0.useDHCP = true;
 
-  swapDevices = [ { label = "swap"; } ];
+  swapDevices = [{ label = "swap"; }];
 
   boot = {
     initrd = {
       availableKernelModules =
         [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-      kernelModules = [];
+      kernelModules = [ ];
     };
     kernelModules = [ "kvm-amd" ];
     kernelParams = [ "amd_iommu=on" ];
