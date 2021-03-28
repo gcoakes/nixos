@@ -42,6 +42,7 @@ in
   home.packages = with pkgs; [
     editor
     git-review
+    nixpkgs-fmt
     nnnNerd
     poetry
     (python27.withPackages (ps: with ps; [ virtualenv ]))
@@ -194,7 +195,7 @@ in
               shell_command = "while true; nvim; end";
               focus = true;
             }
-            {}
+            { }
           ];
           layout = "main-horizontal";
           options.main-pane-height = 40;

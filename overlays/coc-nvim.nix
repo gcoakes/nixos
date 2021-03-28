@@ -1,7 +1,7 @@
-inputs: self: super:
+inputs: final: prev:
 {
-  vimPlugins = super.vimPlugins // {
-    coc-nvim = super.vimUtils.buildVimPluginFrom2Nix {
+  vimPlugins = prev.vimPlugins // {
+    coc-nvim = prev.vimUtils.buildVimPluginFrom2Nix {
       pname = "coc-nvim";
       version = "ad49565b";
       src = inputs."coc.nvim";

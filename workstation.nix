@@ -9,7 +9,7 @@
     initrd = {
       availableKernelModules =
         [ "vfio-pci" "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-      kernelModules = [];
+      kernelModules = [ ];
       preDeviceCommands = ''
         DEVS="0000:01:00.0"
         for DEV in $DEVS; do
