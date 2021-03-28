@@ -91,6 +91,9 @@ noremap <C-w>< <cmd>vert resize -10<CR>
 noremap <C-w>> <cmd>vert resize +10<CR>
 nnoremap gb :Buffers<CR>
 
+let g:licenses_copyright_holders_name = 'Oakes, Gregory C. <gregcoakes@gmail.com>'
+let g:licenses_authors_name = 'Oakes, Gregory C. <gregcoakes@gmail.com>'
+
 let g:lightline = {
 \   'colorscheme': 'dracula',
 \   'active': {
