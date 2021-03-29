@@ -1,5 +1,9 @@
 with builtins;
-{ config, pkgs, inputs, ... }: {
+{ config, pkgs, inputs, ... }:
+let
+  xmonad-config = pkgs.haskellPackages.callPackage ./xmonad { };
+in
+{
   ####################################
   ######## User Configuration ########
   ####################################
@@ -10,6 +14,7 @@ with builtins;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
     openssh.authorizedKeys.keyFiles =
       [ ./ssh-laptop.pub ./ssh-workstation.pub ];
+    initialPassword = "P@ssw0rd";
   };
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
@@ -117,8 +122,45 @@ with builtins;
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome3.enable = true;
+    displayManager = {
+      defaultSession = "none+xmonad";
+      lightdm = {
+        enable = true;
+        greeters.mini = {
+          enable = true;
+          user = "gcoakes";
+          extraConfig = ''
+            [greeter]
+            show-password-label = false
+            [greeter-theme]
+            font = "Hasklug Nerd Font Complete"
+            background-image = ""
+            text-color = "#f8f8f2"
+            error-color = "#ff5555"
+            background-color = "#282a36"
+            window-color = "#44475a"
+            border-color = "#6272a4"
+            password-color = "#f8f8f2"
+            password-background-color = "#282a36"
+            password-border-color = "#6272a4"
+          '';
+        };
+        extraSeatDefaults = ''
+          user-session = ${config.services.xserver.displayManager.defaultSession}
+        '';
+      };
+      session = [
+        {
+          manage = "window";
+          name = "xmonad";
+          start = ''
+            ${xmonad-config}/bin/xmonad-config &
+            waitPID=$!
+          '';
+        }
+      ];
+    };
+    desktopManager.xterm.enable = false;
     videoDrivers = [ "amdgpu" "radeon" ];
     layout = "us";
     libinput = {
@@ -130,18 +172,9 @@ with builtins;
     };
   };
 
-  environment.gnome3.excludePackages = with pkgs.gnome3; [
-    epiphany
-    geary
-    gedit
-    gnome-terminal
-    seahorse
-    yelp
-  ];
-
-  programs.gnupg.agent.pinentryFlavor = "gnome";
-
   programs.dconf.enable = true;
+
+  programs.gnupg.agent.pinentryFlavor = "gtk";
 
   security.chromiumSuidSandbox.enable = true;
 
@@ -151,8 +184,6 @@ with builtins;
 
   security.pki.certificates =
     [ (builtins.readFile "${inputs.dod-pki}/DoD_PKE_CA_chain.pem") ];
-
-  programs.adb.enable = true;
 
   ###########################################
   ######## System Package Management ########
@@ -169,11 +200,6 @@ with builtins;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.networkmanager.enable = true;
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
 
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;

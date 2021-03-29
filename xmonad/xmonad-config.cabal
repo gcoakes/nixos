@@ -1,0 +1,16 @@
+cabal-version: 2.2
+name: xmonad-config
+version: 0.1.0.0
+license: GPL-3.0-or-later
+author: Gregory C. Oakes
+maintainer: gregcoakes@gmail.com
+executable xmonad-config
+  main-is: Main.hs
+  build-depends: base
+               , xmonad
+               , xmonad-contrib
+               , xmonad-extras
+               , dbus
+               , containers
+               , utf8-string
+  default-language: Haskell2010

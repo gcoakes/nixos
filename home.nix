@@ -2,7 +2,7 @@ inputs:
 { config, pkgs, lib, nixosConfig, ... }:
 let
   hasBattery = nixosConfig.networking.hostName == "laptop";
-  sauceFont = pkgs.nerdfonts.override { fonts = [ "SourceCodePro" ]; };
+  haskligFont = pkgs.nerdfonts.override { fonts = [ "Hasklig" ]; };
   gpsm = with pkgs;
     writeShellScriptBin "gpsm" ''
       ${findutils}/bin/find ~/.password-store/ -name '.git*' -prune -o -type d -print \
@@ -18,38 +18,14 @@ let
       | ${dmenu}/bin/dmenu \
       | ${findutils}/bin/xargs ${pass}/bin/pass show -c"${"\${1-1}"}"
     '';
-  wallpaper = builtins.fetchurl {
-    url = "https://i.redd.it/u5wugt3u42761.png";
-    sha256 = "12g7q1lkkawmswh3xa6lq1cjyxcdck2yvq2xipcrh1lq2s8g0xsp";
-  };
-  windows-vm = with pkgs;
-    writeShellScriptBin "windows-vm" ''
-      exec ${qemu_kvm}/bin/qemu-kvm \
-        -cpu host \
-        -drive file=/mnt/data/qemu/images/win10.qcow2 \
-        -net nic \
-        -net user,hostfwd=tcp::2223-:22 \
-        -m 8G \
-        -monitor stdio \
-        -name "Windows" \
-        $@
-    '';
-  mo2-handler = with pkgs;
-    writeShellScriptBin "modorganizer2-nxm-broker.sh" (
-      builtins.readFile
-        "${inputs.lutris-skyrimse-installers}/handlers/modorganizer2-nxm-broker.sh"
-    );
-  mo2-handler-desktop-item = pkgs.makeDesktopItem {
-    name = "modorganizer2-nxm-handler";
-    desktopName = "Mod Organizer 2 NXM Handler";
-    type = "Application";
-    categories = "Game;";
-    exec = "${mo2-handler}/bin/modorganizer2-nxm-broker.sh %u";
-    mimeType = "x-scheme-handler/nxm";
-    extraEntries = ''
-      NoDisplay=true
-    '';
-  };
+  wallpapers = builtins.map builtins.fetchurl [
+    { url = "https://i.redd.it/u5wugt3u42761.png"; sha256 = "12g7q1lkkawmswh3xa6lq1cjyxcdck2yvq2xipcrh1lq2s8g0xsp"; }
+    { url = "https://i.imgur.com/hyt5lCu.jpg"; sha256 = "1mrq6qzm298wm2zpvaziascivvrfa8yywg9i3f4fb25msgv4grfz"; }
+    { url = "https://i.imgur.com/cDvIVbE.jpg"; sha256 = "0xrdcgmbyf1zhi96qmrmfnsc85w47frjk8abbdlgkvwram75cqlw"; }
+    { url = "https://i.imgur.com/eozPPEI.jpg"; sha256 = "05qinkfw8giqn1qcy1zz4fdx6gs72iq883nxx4diya8x24vgls2v"; }
+  ];
+  wallpapersDirectory = pkgs.linkFarm "wallpapers"
+    (builtins.map (w: { name = builtins.baseNameOf w; path = w; }) wallpapers);
 in
 {
   imports = [ (import ./dev-env.nix { email = "gregcoakes@gmail.com"; inherit inputs; }) ];
@@ -69,46 +45,29 @@ in
   # changes in each release.
   home.stateVersion = "21.05";
 
-  home.packages = with pkgs;
-    [
-      brave
-      cachix
-      ccid
-      cookiecutter
-      deno
-      discord
-      dmenu
-      element-desktop
-      ffmpeg
-      gimp
-      google-chrome
-      gpsm
-      home-manager
-      inkscape
-      ipfs
-      libreoffice
-      lutris
-      mo2-handler
-      mo2-handler-desktop-item
-      neovim-remote
-      niv
-      opensc
-      pass
-      pavucontrol
-      protontricks
-      psm
-      sauceFont
-      spotify
-      steam
-      teams
-      unzip
-      virt-manager
-      wineWowPackages.full
-      xclip
-      yarn
-      zip
-      zstd
-    ] ++ (if hasBattery then [ ] else [ windows-vm ]);
+  home.packages = with pkgs; [
+    brave
+    cachix
+    ccid
+    dmenu
+    ffmpeg
+    gimp
+    gpsm
+    ipfs
+    libreoffice
+    neovim-remote
+    opensc
+    pass
+    pavucontrol
+    psm
+    haskligFont
+    spotify
+    unzip
+    xclip
+    yarn
+    zip
+    zstd
+  ];
 
   programs = {
     gpg.enable = true;
@@ -116,13 +75,10 @@ in
     kitty = {
       enable = true;
       font = {
-        name = "SauceCodePro Nerd Font";
-        package = sauceFont;
+        name = "Hasklug Nerd Font Complete";
+        package = haskligFont;
       };
-      settings = {
-        font_size = if hasBattery then "11.0" else "12.0";
-        enable_audio_bell = "no";
-      };
+      settings.enable_audio_bell = "no";
       extraConfig = ''
         include ${inputs.kitty-themes}/themes/Dracula.conf
       '';
@@ -135,6 +91,11 @@ in
       defaultCacheTtl = 86400;
       enableSshSupport = true;
       sshKeys = [ "3310F4B460D1579E7BAD6684D9E9B9083B574282" ];
+    };
+    random-background = {
+      enable = true;
+      interval = "1h";
+      imageDirectory = "${wallpapersDirectory}";
     };
   };
   xdg = {
@@ -154,22 +115,11 @@ in
         "x-scheme-handler/https" = [ "brave-browser.desktop" ];
         "x-scheme-handler/about" = [ "brave-browser.desktop" ];
         "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
-        "x-scheme-handler/msteams" = [ "teams.desktop" ];
-        "x-scheme-handler/nxm" = [ "modorganizer2-nxm-handler.desktop" ];
       };
     };
   };
 
   fonts.fontconfig.enable = true;
-
-  dconf = {
-    enable = true;
-    settings = {
-      "org/gnome/desktop/peripherals/mouse".accel-profile = "flat";
-      "org/gnome/desktop/background".picture-uri = "file://${wallpaper}";
-      "org/gnome/desktop/screensaver".picture-uri = "file://${wallpaper}";
-    };
-  };
 
   gtk = {
     enable = true;
@@ -181,23 +131,23 @@ in
 
   home.activation = {
     passwordStoreDownload = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        test -d "$HOME/.password-store" \
+      test -d "$HOME/.password-store" \
       || $DRY_RUN_CMD git clone git@gitlab.com:gcoakes/password-store.git $HOME/.password-store
     '';
     dodPki = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if ! ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" -list | grep -q '^[[:space:]]*[[:digit:]]\+\. CAC Module'; then
-      echo "Adding CAC Module to NSS."
-      $DRY_RUN_CMD ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" \
-      -add "CAC Module" -libfile "$HOME/.nix-profile/lib/opensc-pkcs11.so" \
-      && $DRY_RUN_CMD ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" -list \
-      | grep -q '^[[:space:]]*[[:digit:]]\+\. CAC Module'
+        echo "Adding CAC Module to NSS."
+        $DRY_RUN_CMD ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" \
+        -add "CAC Module" -libfile "$HOME/.nix-profile/lib/opensc-pkcs11.so" \
+        && $DRY_RUN_CMD ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" -list \
+        | grep -q '^[[:space:]]*[[:digit:]]\+\. CAC Module'
       fi
 
       if ! ${pkgs.nssTools}/bin/certutil -d "sql:$HOME/.pki/nssdb" -L -n "${inputs.dod-pki}/DoD_PKE_CA_chain.pem"; then
-      echo "Installing DoD PKI Certificates."
-      $DRY_RUN_CMD ${pkgs.nssTools}/bin/certutil -d "sql:$HOME/.pki/nssdb" -A -t TC \
-      -n "${inputs.dod-pki}/DoD_PKE_CA_chain.pem" \
-      -i "${inputs.dod-pki}/DoD_PKE_CA_chain.pem"
+        echo "Installing DoD PKI Certificates."
+        $DRY_RUN_CMD ${pkgs.nssTools}/bin/certutil -d "sql:$HOME/.pki/nssdb" -A -t TC \
+        -n "${inputs.dod-pki}/DoD_PKE_CA_chain.pem" \
+        -i "${inputs.dod-pki}/DoD_PKE_CA_chain.pem"
       fi
     '';
   };

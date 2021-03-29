@@ -83,7 +83,13 @@
           '';
 
           devShell = pkgs.mkShell {
-            nativeBuildInputs = with pkgs; [ nixpkgs-fmt ];
+            inputsFrom = [
+              (pkgs.haskellPackages.callPackage ./xmonad { }).env
+            ];
+            nativeBuildInputs = with pkgs; [
+              nixpkgs-fmt
+              ormolu
+            ];
           };
         }
       );

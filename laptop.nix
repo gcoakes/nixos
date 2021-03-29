@@ -11,7 +11,6 @@
 
   networking.hostName = "laptop";
   networking.dhcpcd.wait = "background";
-  networking.interfaces.wlp2s0.useDHCP = true;
 
   swapDevices = [{ label = "swap"; }];
 

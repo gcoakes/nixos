@@ -2,8 +2,6 @@
   virtualisation.libvirtd.enable = true;
 
   networking.hostName = "workstation";
-  networking.interfaces.enp7s0.useDHCP = true;
-  networking.interfaces.wlp6s0.useDHCP = true;
 
   boot = {
     initrd = {
@@ -76,4 +74,9 @@
 
   environment.variables.VK_ICD_FILENAMES =
     "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
+
+  services.xserver.xrandrHeads = [
+    { output = "DisplayPort-1"; primary = true; }
+    { output = "DisplayPort-2"; monitorConfig = ''Option "Rotate" "right"''; }
+  ];
 }

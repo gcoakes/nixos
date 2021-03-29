@@ -123,6 +123,7 @@ in
         ripgrep
         rnix-lsp
         rust-analyzer
+        haskell-language-server
       ];
     };
     tmux = {
