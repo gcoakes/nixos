@@ -51,23 +51,25 @@ in
   ];
   home.sessionVariables = { EDITOR = "nvim"; };
   programs = {
-    fish = {
+    zsh = {
       enable = true;
-      shellInit = ''
-        if set -q TMUX
-          set window_id (tmux list-panes -F '#{window_id}' | head -n1)
-          set -q XDG_RUNTIME_DIR; or set XDG_RUNTIME_DIR /tmp
-          set -gx NVIM_LISTEN_ADDRESS "$XDG_RUNTIME_DIR/tmux-nvim-$window_id"
-          set -gx EDITOR "${tnvr}/bin/tnvr -s"
-        end
+      oh-my-zsh = {
+        enable = true;
+        theme = "fino-time";
+        plugins = [ "colored-man-pages" ];
+      };
+      initExtra = ''
+        if [ -n "$TMUX" ]; then
+          window_id="$(tmux list-panes -F '#{window_id}' | head -n1)"
+          export NVIM_LISTEN_ADDRESS="$${XDG_RUNTIME_DIR-/tmp}/tmux-nvim-$window_id"
+          export EDITOR="${tnvr}/bin/tnvr -s"
+        fi
       '';
-      plugins = [
-        { name = "theme-agnoster"; src = inputs.theme-agnoster; }
-      ];
+      enableAutosuggestions = true;
     };
     fzf = {
       enable = true;
-      enableFishIntegration = true;
+      enableZshIntegration = true;
     };
     git = {
       enable = true;
@@ -82,7 +84,7 @@ in
     };
     direnv = {
       enable = true;
-      enableFishIntegration = true;
+      enableZshIntegration = true;
       enableNixDirenvIntegration = true;
     };
     neovim = {
@@ -193,7 +195,7 @@ in
         {
           panes = [
             {
-              shell_command = "while true; nvim; end";
+              shell_command = "while :; do nvim; done";
               focus = true;
             }
             { }

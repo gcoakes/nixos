@@ -15,10 +15,6 @@
       url = "github:dracula/sublime";
       flake = false;
     };
-    theme-agnoster = {
-      url = "github:oh-my-fish/theme-agnoster";
-      flake = false;
-    };
     kitty-themes = {
       url = "github:dexpota/kitty-themes";
       flake = false;

@@ -9,7 +9,7 @@ in
   ####################################
 
   users.users.gcoakes = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
     openssh.authorizedKeys.keyFiles =

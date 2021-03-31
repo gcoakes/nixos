@@ -5,7 +5,7 @@
     etcNixos = lib.cleanSource ./.;
   };
   users.users.oakesgrx = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     isNormalUser = true;
   };
   home-manager.useGlobalPkgs = true;

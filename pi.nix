@@ -17,7 +17,7 @@
 
   # User management.
   users.users.gcoakes = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keyFiles =
