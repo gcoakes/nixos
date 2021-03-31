@@ -120,10 +120,11 @@ in
       extraPackages = with pkgs; [
         bat
         fzf
+        haskell-language-server
         ripgrep
         rnix-lsp
         rust-analyzer
-        haskell-language-server
+        rustfmt
       ];
     };
     tmux = {
