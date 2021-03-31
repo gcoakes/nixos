@@ -30,6 +30,5 @@
       enable = true;
       driSupport32Bit = true;
     };
-    sensor.iio.enable = true;
   };
 }
