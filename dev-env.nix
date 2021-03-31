@@ -121,6 +121,7 @@ in
       ];
       extraPackages = with pkgs; [
         bat
+        clang-tools
         fzf
         haskell-language-server
         ripgrep
