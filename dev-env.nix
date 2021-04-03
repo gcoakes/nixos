@@ -12,22 +12,6 @@ let
       ${tmux}/bin/tmux set -wu "@$name"
     fi
   '';
-  sidebar = with pkgs; writeShellScript "sidebar" ''
-    window_id="$(tmux list-panes -F '#{window_id}' | head -n1)"
-    export NVIM_LISTEN_ADDRESS="${"$"}{XDG_RUNTIME_DIR-/tmp}/tmux-nvim-$window_id"
-    export NNN_OPENER="${tnvr}"
-    exec ${nnnNerd}/bin/nnn -c $@
-  '';
-  nnnNerd = pkgs.nnn.override { withNerdIcons = true; };
-  tnvr = with pkgs; writeShellScriptBin "tnvr" ''
-    if [ -n "$TMUX" ]; then
-      pane_id="$(${neovim-remote}/bin/nvr --nostart -s --remote-expr 'get(environ(), "TMUX_PANE")')"
-      if [ -n "$pane_id" ]; then
-        tmux select-pane -t "$pane_id"
-      fi
-    fi
-    exec ${neovim-remote}/bin/nvr $@
-  '';
   editor = with pkgs; writeShellScriptBin "editor" ''
     if [ -n "$1" ]; then
       cd "$1" || exit 1
@@ -43,11 +27,10 @@ in
     editor
     git-review
     nixpkgs-fmt
-    nnnNerd
+    (nnn.override { withNerdIcons = true; })
     poetry
     (python27.withPackages (ps: with ps; [ virtualenv ]))
     python36
-    tnvr
   ];
   home.sessionVariables = { EDITOR = "nvim"; };
   programs = {
@@ -61,8 +44,6 @@ in
       initExtra = ''
         if [ -n "$TMUX" ]; then
           window_id="$(tmux list-panes -F '#{window_id}' | head -n1)"
-          export NVIM_LISTEN_ADDRESS="$${XDG_RUNTIME_DIR-/tmp}/tmux-nvim-$window_id"
-          export EDITOR="${tnvr}/bin/tnvr -s"
         fi
       '';
       enableAutosuggestions = true;
@@ -78,7 +59,7 @@ in
       ignores = [ ".direnv/" "coc-settings.json" ];
       delta.enable = true;
       extraConfig = {
-        core.editor = "${tnvr}/bin/tnvr --remote-wait-silent -s";
+        core.editor = "nvim";
         init.defaultBranch = "main";
       };
     };
@@ -155,7 +136,6 @@ in
 
         setw -g mouse
         bind C-q kill-session
-        bind Tab run-shell '${toggle-tmux-pane} nnn -hbf -l 15% ${sidebar}'
       '';
     };
     jq.enable = true;
