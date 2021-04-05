@@ -27,4 +27,5 @@ with builtins;
   ######################
 
   time.timeZone = "US/Central";
+  security.pam.enableSSHAgentAuth = true;
 }

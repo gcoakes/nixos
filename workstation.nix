@@ -17,7 +17,12 @@
       '';
     };
     kernelModules = [ "kvm-amd" ];
-    kernelParams = [ "amd_iommu=on" "pcie_aspm=off" ];
+    kernelParams = [
+      "amd_iommu=on"
+      "pcie_aspm=off"
+      "hugepagesz=1GB"
+      "hugepages=4"
+    ];
   };
 
   fileSystems = {
