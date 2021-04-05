@@ -20,6 +20,9 @@ in
   home-manager.useUserPackages = true;
   home-manager.users.gcoakes = import ./home.nix inputs;
 
+  users.users.root.openssh.authorizedKeys.keyFiles =
+    [ ./ssh-laptop.pub ./ssh-workstation.pub ];
+
   #############################
   ######## Filesystems ########
   #############################
