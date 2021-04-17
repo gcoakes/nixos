@@ -4,6 +4,7 @@
   networking.hostName = "workstation";
 
   boot = {
+    supportedFilesystems = [ "btrfs" "ntfs" ];
     initrd = {
       availableKernelModules =
         [ "vfio-pci" "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
@@ -20,9 +21,10 @@
     kernelParams = [
       "amd_iommu=on"
       "pcie_aspm=off"
-      "hugepagesz=1GB"
-      "hugepages=4"
     ];
+    kernel.sysctl = {
+      "vm.nr_hugepages" = "64";
+    };
   };
 
   fileSystems = {

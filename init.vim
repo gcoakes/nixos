@@ -156,4 +156,5 @@ autocmd FileType typescript setlocal shiftwidth=2 tabstop=2
 autocmd FileType nix setlocal shiftwidth=2 tabstop=2
 autocmd FileType vim setlocal shiftwidth=2 tabstop=2
 autocmd FileType json setlocal shiftwidth=2 tabstop=2
+autocmd FileType tex setlocal formatoptions=tca textwidth=80 spell spelllang=en_us
 
