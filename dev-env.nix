@@ -29,7 +29,7 @@ in
     nixpkgs-fmt
     (nnn.override { withNerdIcons = true; })
     poetry
-    (python27.withPackages (ps: with ps; [ virtualenv ]))
+    # (python27.withPackages (ps: with ps; [ virtualenv ]))
     python36
   ];
   home.sessionVariables = { EDITOR = "nvim"; };

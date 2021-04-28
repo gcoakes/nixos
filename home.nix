@@ -130,10 +130,6 @@ in
   };
 
   home.activation = {
-    passwordStoreDownload = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      test -d "$HOME/.password-store" \
-      || $DRY_RUN_CMD git clone git@gitlab.com:gcoakes/password-store.git $HOME/.password-store
-    '';
     dodPki = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if ! ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" -list | grep -q '^[[:space:]]*[[:digit:]]\+\. CAC Module'; then
         echo "Adding CAC Module to NSS."
