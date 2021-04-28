@@ -1,9 +1,7 @@
 with builtins;
 { config, pkgs, inputs, ... }:
-let
-  xmonad-config = pkgs.haskellPackages.callPackage ./xmonad { };
-in
-{
+let xmonad-config = pkgs.haskellPackages.callPackage ./xmonad { };
+in {
   ####################################
   ######## User Configuration ########
   ####################################
@@ -152,16 +150,14 @@ in
           user-session = ${config.services.xserver.displayManager.defaultSession}
         '';
       };
-      session = [
-        {
-          manage = "window";
-          name = "xmonad";
-          start = ''
-            ${xmonad-config}/bin/xmonad-config &
-            waitPID=$!
-          '';
-        }
-      ];
+      session = [{
+        manage = "window";
+        name = "xmonad";
+        start = ''
+          ${xmonad-config}/bin/xmonad-config &
+          waitPID=$!
+        '';
+      }];
     };
     desktopManager.xterm.enable = false;
     videoDrivers = [ "amdgpu" "radeon" ];

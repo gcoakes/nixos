@@ -19,16 +19,34 @@ let
       | ${findutils}/bin/xargs ${pass}/bin/pass show -c"${"\${1-1}"}"
     '';
   wallpapers = builtins.map builtins.fetchurl [
-    { url = "https://i.redd.it/u5wugt3u42761.png"; sha256 = "12g7q1lkkawmswh3xa6lq1cjyxcdck2yvq2xipcrh1lq2s8g0xsp"; }
-    { url = "https://i.imgur.com/hyt5lCu.jpg"; sha256 = "1mrq6qzm298wm2zpvaziascivvrfa8yywg9i3f4fb25msgv4grfz"; }
-    { url = "https://i.imgur.com/cDvIVbE.jpg"; sha256 = "0xrdcgmbyf1zhi96qmrmfnsc85w47frjk8abbdlgkvwram75cqlw"; }
-    { url = "https://i.imgur.com/eozPPEI.jpg"; sha256 = "05qinkfw8giqn1qcy1zz4fdx6gs72iq883nxx4diya8x24vgls2v"; }
+    {
+      url = "https://i.redd.it/u5wugt3u42761.png";
+      sha256 = "12g7q1lkkawmswh3xa6lq1cjyxcdck2yvq2xipcrh1lq2s8g0xsp";
+    }
+    {
+      url = "https://i.imgur.com/hyt5lCu.jpg";
+      sha256 = "1mrq6qzm298wm2zpvaziascivvrfa8yywg9i3f4fb25msgv4grfz";
+    }
+    {
+      url = "https://i.imgur.com/cDvIVbE.jpg";
+      sha256 = "0xrdcgmbyf1zhi96qmrmfnsc85w47frjk8abbdlgkvwram75cqlw";
+    }
+    {
+      url = "https://i.imgur.com/eozPPEI.jpg";
+      sha256 = "05qinkfw8giqn1qcy1zz4fdx6gs72iq883nxx4diya8x24vgls2v";
+    }
   ];
-  wallpapersDirectory = pkgs.linkFarm "wallpapers"
-    (builtins.map (w: { name = builtins.baseNameOf w; path = w; }) wallpapers);
-in
-{
-  imports = [ (import ./dev-env.nix { email = "gregcoakes@gmail.com"; inherit inputs; }) ];
+  wallpapersDirectory = pkgs.linkFarm "wallpapers" (builtins.map (w: {
+    name = builtins.baseNameOf w;
+    path = w;
+  }) wallpapers);
+in {
+  imports = [
+    (import ./dev-env.nix {
+      email = "gregcoakes@gmail.com";
+      inherit inputs;
+    })
+  ];
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -86,6 +104,10 @@ in
     zathura.enable = true;
   };
   services = {
+    gnome-keyring = {
+      enable = true;
+      components = [ "secrets" ];
+    };
     gpg-agent = {
       enable = true;
       defaultCacheTtl = 86400;
@@ -103,12 +125,12 @@ in
     mimeApps = {
       enable = true;
       defaultApplications = {
-        "text/plain" = [ "nvim.desktop" ];
-        "text/x-script.python" = [ "nvim.desktop" ];
-        "text/x-script.sh" = [ "nvim.desktop" ];
-        "text/html" = [ "nvim.desktop" ];
-        "text/css" = [ "nvim.desktop" ];
-        "text/xml" = [ "nvim.desktop" ];
+        "text/plain" = [ "code.desktop" ];
+        "text/x-script.python" = [ "code.desktop" ];
+        "text/x-script.sh" = [ "code.desktop" ];
+        "text/html" = [ "code.desktop" ];
+        "text/css" = [ "code.desktop" ];
+        "text/xml" = [ "code.desktop" ];
         "application/pdf" = [ "org.pwmt.zathura.desktop" ];
         "application/x-pdf" = [ "org.pwmt.zathura.desktop" ];
         "x-scheme-handler/http" = [ "brave-browser.desktop" ];

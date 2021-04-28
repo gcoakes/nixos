@@ -24,23 +24,20 @@
       flake = false;
     };
     dod-pki = {
-      url = "https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-10_wcf.zip";
+      url =
+        "https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-10_wcf.zip";
       flake = false;
     };
     vim-licenses = {
-      url = github:antoyo/vim-licenses;
+      url = "github:antoyo/vim-licenses";
       flake = false;
     };
   };
   outputs = { self, nixpkgs, home-manager, flake-utils, nixos-wsl, ... }@inputs:
     let
-      systemModules = [
-        ./common.nix
-        ./system.nix
-        home-manager.nixosModules.home-manager
-      ];
-    in
-    {
+      systemModules =
+        [ ./common.nix ./system.nix home-manager.nixosModules.home-manager ];
+    in {
       nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         extraArgs = { inherit inputs; };
@@ -51,28 +48,19 @@
         extraArgs = { inherit inputs; };
         modules = systemModules ++ [ ./laptop.nix ];
       };
-    } // flake-utils.lib.eachDefaultSystem
-      (
-        system:
-        let
-          pkgs = import nixpkgs { inherit system; };
-        in
-        {
-          checks.check-format = pkgs.runCommand "check-format"
-            { buildInputs = with pkgs; [ nixpkgs-fmt ]; } ''
-            nixpkgs-fmt --check ${./.}
-            mkdir $out # success
-          '';
+    } // flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = import nixpkgs { inherit system; };
+      in {
+        checks.check-format = pkgs.runCommand "check-format" {
+          buildInputs = with pkgs; [ nixpkgs-fmt ];
+        } ''
+          nixpkgs-fmt --check ${./.}
+          mkdir $out # success
+        '';
 
-          devShell = pkgs.mkShell {
-            inputsFrom = [
-              (pkgs.haskellPackages.callPackage ./xmonad { }).env
-            ];
-            nativeBuildInputs = with pkgs; [
-              nixpkgs-fmt
-              ormolu
-            ];
-          };
-        }
-      );
+        devShell = pkgs.mkShell {
+          inputsFrom = [ (pkgs.haskellPackages.callPackage ./xmonad { }).env ];
+          nativeBuildInputs = with pkgs; [ nixpkgs-fmt ormolu ];
+        };
+      });
 }

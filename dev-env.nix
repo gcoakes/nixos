@@ -1,38 +1,8 @@
 { email, inputs }:
-{ config, pkgs, lib, nixosConfig, ... }:
-let
-  toggle-tmux-pane = with pkgs; writeShellScript "toggle-tmux-pane" ''
-    name="$1"
-    shift
-    P="$(tmux show -wv "@$name")"
-    if [ -z "$P" ]; then
-      ${tmux}/bin/tmux set -w "@$name" "$(${tmux}/bin/tmux splitw -PF '#{pane_id}' $@)"
-    else
-      ${tmux}/bin/tmux killp -t "$P"
-      ${tmux}/bin/tmux set -wu "@$name"
-    fi
-  '';
-  editor = with pkgs; writeShellScriptBin "editor" ''
-    if [ -n "$1" ]; then
-      cd "$1" || exit 1
-    fi
-    if [ -f .envrc ]; then
-      direnv allow || exit 2
-    fi
-    exec tmuxp load -a default
-  '';
-in
-{
-  home.packages = with pkgs; [
-    editor
-    git-review
-    nixpkgs-fmt
-    (nnn.override { withNerdIcons = true; })
-    poetry
-    python36
-  ];
-  home.sessionVariables = { EDITOR = "nvim"; };
+{ config, pkgs, lib, nixosConfig, ... }: {
+  home.packages = with pkgs; [ git-review nixfmt poetry cargo ];
   programs = {
+    vscode.enable = true;
     zsh = {
       enable = true;
       oh-my-zsh = {
@@ -44,6 +14,12 @@ in
         if [ -n "$TMUX" ]; then
           window_id="$(tmux list-panes -F '#{window_id}' | head -n1)"
         fi
+        if [ -z "$DISPLAY" ]; then
+          export EDITOR=nvim
+        else
+          export EDITOR="code --wait"
+        fi
+        export GIT_EDITOR="$EDITOR"
       '';
       enableAutosuggestions = true;
     };
@@ -55,12 +31,9 @@ in
       enable = true;
       userEmail = email;
       userName = "Gregory C. Oakes";
-      ignores = [ ".direnv/" "coc-settings.json" ];
+      ignores = [ ".direnv/" ];
       delta.enable = true;
-      extraConfig = {
-        core.editor = "nvim";
-        init.defaultBranch = "main";
-      };
+      extraConfig = { init.defaultBranch = "main"; };
     };
     direnv = {
       enable = true;
@@ -71,43 +44,13 @@ in
       enable = true;
       viAlias = true;
       vimAlias = true;
-      withPython3 = true;
-      withNodeJs = true;
       extraConfig = builtins.readFile ./init.vim;
       plugins = with pkgs.vimPlugins; [
-        coc-clangd
-        coc-css
-        coc-eslint
-        coc-fzf
-        coc-git
-        coc-html
-        coc-json
-        coc-nvim
-        coc-pairs
-        coc-pyright
-        coc-rust-analyzer
-        coc-spell-checker
-        coc-tsserver
-        coc-vimlsp
-        coc-yaml
         dracula-vim
-        fugitive
         fzf-vim
         lightline-vim
-        (pkgs.vimUtils.buildVimPlugin { name = "vim-licenses"; src = inputs.vim-licenses; })
         vim-nix
         vim-rooter
-        vista-vim
-      ];
-      extraPackages = with pkgs; [
-        bat
-        clang-tools
-        fzf
-        haskell-language-server
-        ripgrep
-        rnix-lsp
-        rust-analyzer
-        rustfmt
       ];
     };
     tmux = {
@@ -152,44 +95,6 @@ in
       themes.dracula = inputs.dracula-sublime + "/Dracula.tmTheme";
     };
   };
-  xdg = {
-    enable = true;
-    configFile."nvim/nix-coc-settings.json" = {
-      text = builtins.readFile ./coc-settings.json;
-      # Impure settings are maintained in coc-settings.json but are overridden
-      # by the pure ones.
-      onChange = ''
-        config_dir="${"$"}{XDG_CONFIG_HOME-$HOME/.config}/nvim"
-        coc_settings="$config_dir/coc-settings.json"
-        nix_settings="$config_dir/nix-coc-settings.json"
-        if [ -f "$coc_settings" ]; then
-          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' "$coc_settings" "$nix_settings" \
-          | ${pkgs.moreutils}/bin/sponge "$coc_settings"
-        else
-          ${pkgs.coreutils}/bin/cp -L "$nix_settings" "$coc_settings"
-        fi
-      '';
-    };
-    configFile."tmuxp/default.json".text = builtins.toJSON {
-      windows = [
-        {
-          panes = [
-            {
-              shell_command = "while :; do nvim; done";
-              focus = true;
-            }
-            { }
-          ];
-          layout = "main-horizontal";
-          options.main-pane-height = 40;
-          focus = true;
-        }
-      ];
-      session_name = "\${PWD}";
-      start_directory = "\${PWD}";
-    };
-  };
-
   home.file = {
     ".npmrc".text = ''
       ignore-scripts = true

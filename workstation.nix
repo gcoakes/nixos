@@ -18,13 +18,8 @@
       '';
     };
     kernelModules = [ "kvm-amd" ];
-    kernelParams = [
-      "amd_iommu=on"
-      "pcie_aspm=off"
-    ];
-    kernel.sysctl = {
-      "vm.nr_hugepages" = "64";
-    };
+    kernelParams = [ "amd_iommu=on" "pcie_aspm=off" ];
+    kernel.sysctl = { "vm.nr_hugepages" = "64"; };
   };
 
   fileSystems = {
@@ -68,13 +63,8 @@
     cpu.amd.updateMicrocode = true;
     opengl = {
       enable = true;
-      extraPackages = with pkgs; [
-        rocm-opencl-icd
-        amdvlk
-      ];
-      extraPackages32 = with pkgs; [
-        driversi686Linux.amdvlk
-      ];
+      extraPackages = with pkgs; [ rocm-opencl-icd amdvlk ];
+      extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
       driSupport32Bit = true;
     };
   };
@@ -83,7 +73,13 @@
     "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
 
   services.xserver.xrandrHeads = [
-    { output = "DisplayPort-1"; primary = true; }
-    { output = "DisplayPort-2"; monitorConfig = ''Option "Rotate" "right"''; }
+    {
+      output = "DisplayPort-1";
+      primary = true;
+    }
+    {
+      output = "DisplayPort-2";
+      monitorConfig = ''Option "Rotate" "right"'';
+    }
   ];
 }
