@@ -135,6 +135,10 @@ in {
         "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
       };
     };
+    configFile."Code/Dictionaries" = {
+      source = "${pkgs.hunspellDicts.en-us}/share/hunspell";
+      recursive = true;
+    };
   };
 
   fonts.fontconfig.enable = true;
