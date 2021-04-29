@@ -69,6 +69,7 @@ in {
     ccid
     dmenu
     ffmpeg
+    firaFont
     gimp
     gpsm
     ipfs
@@ -78,7 +79,6 @@ in {
     pass
     pavucontrol
     psm
-    firaFont
     spotify
     unzip
     xclip
@@ -104,10 +104,6 @@ in {
     zathura.enable = true;
   };
   services = {
-    gnome-keyring = {
-      enable = true;
-      components = [ "secrets" ];
-    };
     gpg-agent = {
       enable = true;
       defaultCacheTtl = 86400;
