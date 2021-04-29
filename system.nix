@@ -115,9 +115,9 @@ in {
   fonts = {
     fontconfig = {
       enable = true;
-      defaultFonts.monospace = [ "Hasklug Nerd Font Complete" ];
+      defaultFonts.monospace = [ "FiraCode Nerd Font Mono" ];
     };
-    fonts = [ (pkgs.nerdfonts.override { fonts = [ "Hasklig" ]; }) ];
+    fonts = [ (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
   };
 
   # Enable the X11 windowing system.
@@ -134,7 +134,7 @@ in {
             [greeter]
             show-password-label = false
             [greeter-theme]
-            font = "Hasklug Nerd Font Complete"
+            font = "FiraCode Nerd Font Mono"
             background-image = ""
             text-color = "#f8f8f2"
             error-color = "#ff5555"

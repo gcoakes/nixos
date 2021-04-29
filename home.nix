@@ -2,7 +2,7 @@ inputs:
 { config, pkgs, lib, nixosConfig, ... }:
 let
   hasBattery = nixosConfig.networking.hostName == "laptop";
-  haskligFont = pkgs.nerdfonts.override { fonts = [ "Hasklig" ]; };
+  firaFont = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
   gpsm = with pkgs;
     writeShellScriptBin "gpsm" ''
       ${findutils}/bin/find ~/.password-store/ -name '.git*' -prune -o -type d -print \
@@ -78,7 +78,7 @@ in {
     pass
     pavucontrol
     psm
-    haskligFont
+    firaFont
     spotify
     unzip
     xclip
@@ -93,8 +93,8 @@ in {
     kitty = {
       enable = true;
       font = {
-        name = "Hasklug Nerd Font Complete";
-        package = haskligFont;
+        name = "FiraCode Nerd Font Mono";
+        package = firaFont;
       };
       settings.enable_audio_bell = "no";
       extraConfig = ''
