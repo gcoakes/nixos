@@ -1,6 +1,6 @@
 { email, inputs }:
 { config, pkgs, lib, nixosConfig, ... }: {
-  home.packages = with pkgs; [ git-review nixfmt poetry cargo ];
+  home.packages = with pkgs; [ git-review nixfmt poetry cargo rustc ];
   programs = {
     vscode.enable = true;
     zsh = {
