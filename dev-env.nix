@@ -31,7 +31,7 @@
       enable = true;
       userEmail = email;
       userName = "Gregory C. Oakes";
-      ignores = [ ".direnv/" ];
+      ignores = [ ".direnv/" ".vscode/" ".envrc" ];
       delta.enable = true;
       extraConfig = { init.defaultBranch = "main"; };
     };
