@@ -9,6 +9,7 @@
     rustc
     cargo-edit
     rust-analyzer
+    gcc
   ];
   programs = {
     vscode.enable = true;
