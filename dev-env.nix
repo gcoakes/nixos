@@ -3,10 +3,12 @@
   home.packages = with pkgs; [
     git-review
     nixfmt
+    python3
     poetry
-    rustup
-    cargo-edit
     cargo
+    rustc
+    cargo-edit
+    rust-analyzer
   ];
   programs = {
     vscode.enable = true;
