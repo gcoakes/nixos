@@ -1,15 +1,27 @@
 { email, inputs }:
-{ config, pkgs, lib, nixosConfig, ... }: {
+{ config, pkgs, lib, nixosConfig, ... }:
+let
+  hidden-shell = with pkgs;
+    writeShellScriptBin "hidden-shell" ''
+      cat > shell.nix <<EOF
+      with (builtins.getFlake flake:nixpkgs).legacyPackages.x86_64-linux;
+      mkShell {
+        nativeBuildInputs = [ $@ ];
+        buildInputs = [];
+      }
+      EOF
+      echo use nix > .envrc
+      echo shell.nix >> .git/info/exclude
+    '';
+in {
   home.packages = with pkgs; [
     git-review
     nixfmt
     python3
     poetry
     cargo
-    rustc
     cargo-edit
     rust-analyzer
-    gcc
   ];
   programs = {
     vscode.enable = true;
