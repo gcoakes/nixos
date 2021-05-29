@@ -29,5 +29,6 @@
   "update.showReleaseNotes": false,
   "extensions.autoCheckUpdates": false,
   "extensions.autoUpdate": false,
-  "git.autofetch": false
+  "git.autofetch": false,
+  "python.showStartPage": false
 }
