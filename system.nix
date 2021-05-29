@@ -120,9 +120,6 @@ in {
     fonts = [ (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
   };
 
-  services.gnome3.gnome-keyring.enable = true;
-  security.pam.services.gcoakes.enableGnomeKeyring = true;
-
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
