@@ -1,4 +1,12 @@
 {
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/.direnv": true
+  },
   "explorer.confirmDragAndDrop": false,
   "editor.formatOnSave": true,
   "[jsonc]": {
