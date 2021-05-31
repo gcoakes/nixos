@@ -37,7 +37,13 @@
       };
     } // flake-utils.lib.eachDefaultSystem (system:
       let pkgs = import nixpkgs { inherit system; };
-      in {
+      in rec {
+        defaultPackage = packages.iso;
+        packages.iso = nixosConfigurations.iso.config.system.build.isoImage;
+        nixosConfigurations.iso = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [ ./iso.nix ];
+        };
         checks.check-format = pkgs.runCommand "check-format" {
           buildInputs = with pkgs; [ nixpkgs-fmt ];
         } ''

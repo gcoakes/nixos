@@ -19,6 +19,7 @@ in {
     cargo-edit
     clang-tools
     git-review
+    hidden-shell
     kubectl
     kubernetes-helm
     nixfmt
