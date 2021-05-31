@@ -1,5 +1,9 @@
 { pkgs, modulesPath, ... }: {
-  imports = [ "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix" ];
+  imports = [
+    "${modulesPath}/installer/cd-dvd/installation-cd-minimal-new-kernel.nix"
+  ];
+
+  system.stateVersion = "21.11";
 
   environment.systemPackages = with pkgs; [ nixFlakes tmux git cryptsetup ];
 
@@ -8,7 +12,7 @@
   security.pam.enableSSHAgentAuth = true;
 
   # User management.
-  users.users.gcoakes = {
+  users.users.nixos = {
     shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [ "wheel" ];
