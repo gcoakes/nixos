@@ -153,19 +153,21 @@ in {
 
   home.activation = {
     dodPki = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      if ! ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" -list | grep -q '^[[:space:]]*[[:digit:]]\+\. CAC Module'; then
-        echo "Adding CAC Module to NSS."
-        $DRY_RUN_CMD ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" \
-        -add "CAC Module" -libfile "$HOME/.nix-profile/lib/opensc-pkcs11.so" \
-        && $DRY_RUN_CMD ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" -list \
-        | grep -q '^[[:space:]]*[[:digit:]]\+\. CAC Module'
-      fi
+      if [ -d "$HOME/.pki/nssdb" ]; then
+        if ! ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" -list | grep -q '^[[:space:]]*[[:digit:]]\+\. CAC Module'; then
+          echo "Adding CAC Module to NSS."
+          $DRY_RUN_CMD ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" \
+          -add "CAC Module" -libfile "$HOME/.nix-profile/lib/opensc-pkcs11.so" \
+          && $DRY_RUN_CMD ${pkgs.nssTools}/bin/modutil -dbdir "sql:$HOME/.pki/nssdb" -list \
+          | grep -q '^[[:space:]]*[[:digit:]]\+\. CAC Module'
+        fi
 
-      if ! ${pkgs.nssTools}/bin/certutil -d "sql:$HOME/.pki/nssdb" -L -n "${inputs.dod-pki}/DoD_PKE_CA_chain.pem"; then
-        echo "Installing DoD PKI Certificates."
-        $DRY_RUN_CMD ${pkgs.nssTools}/bin/certutil -d "sql:$HOME/.pki/nssdb" -A -t TC \
-        -n "${inputs.dod-pki}/DoD_PKE_CA_chain.pem" \
-        -i "${inputs.dod-pki}/DoD_PKE_CA_chain.pem"
+        if ! ${pkgs.nssTools}/bin/certutil -d "sql:$HOME/.pki/nssdb" -L -n "${inputs.dod-pki}/DoD_PKE_CA_chain.pem"; then
+          echo "Installing DoD PKI Certificates."
+          $DRY_RUN_CMD ${pkgs.nssTools}/bin/certutil -d "sql:$HOME/.pki/nssdb" -A -t TC \
+          -n "${inputs.dod-pki}/DoD_PKE_CA_chain.pem" \
+          -i "${inputs.dod-pki}/DoD_PKE_CA_chain.pem"
+        fi
       fi
     '';
   };
