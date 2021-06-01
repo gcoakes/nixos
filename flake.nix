@@ -24,7 +24,7 @@
     let
       systemModules =
         [ ./common.nix ./system.nix home-manager.nixosModules.home-manager ];
-    in {
+    in rec {
       nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         extraArgs = { inherit inputs; };
@@ -35,15 +35,15 @@
         extraArgs = { inherit inputs; };
         modules = systemModules ++ [ ./laptop.nix ];
       };
+      defaultPackage = packages.iso;
+      packages.iso = nixosConfigurations.iso.config.system.build.isoImage;
+      nixosConfigurations.iso = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [ ./iso.nix ];
+      };
     } // flake-utils.lib.eachDefaultSystem (system:
       let pkgs = import nixpkgs { inherit system; };
       in rec {
-        defaultPackage = packages.iso;
-        packages.iso = nixosConfigurations.iso.config.system.build.isoImage;
-        nixosConfigurations.iso = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [ ./iso.nix ];
-        };
         checks.check-format = pkgs.runCommand "check-format" {
           buildInputs = with pkgs; [ nixpkgs-fmt ];
         } ''
