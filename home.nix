@@ -102,6 +102,7 @@ in {
       '';
     };
     zathura.enable = true;
+    password-store.enable = true;
   };
   services = {
     gpg-agent = {
@@ -115,20 +116,7 @@ in {
       interval = "1h";
       imageDirectory = "${wallpapersDirectory}";
     };
-  };
-  systemd.user.services = {
-    pass-secret-service = {
-      Unit = {
-        Description = "The standard unix password manager secret service.";
-        PartOf = [ "graphical-session-pre.target" ];
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = "${pkgs.pass-secret-service}/bin/pass_secret_service";
-        Restart = "on-abort";
-      };
-      Install.WantedBy = [ "graphical-session-pre.target" ];
-    };
+    pass-secret-service.enable = true;
   };
   xdg = {
     enable = true;
