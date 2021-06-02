@@ -34,30 +34,30 @@ import XMonad.Util.Font (Align (AlignLeft, AlignRightOffset))
 import XMonad.Util.Scratchpad (scratchpadManageHook, scratchpadSpawnActionCustom)
 
 main =
-  launch $
-    ewmh $
-      docks
-        def
-          { terminal = myTerminal,
-            modMask = mod4Mask,
-            layoutHook = myLayouts,
-            manageHook =
-              composeAll
-                [ manageHook def,
-                  manageDocks,
-                  isFullscreen --> doFullFloat,
-                  scratchpadManageHook $ W.RationalRect 0.25 0.25 0.5 0.5
-                ],
-            handleEventHook =
-              composeAll
-                [ handleEventHook def,
-                  fullscreenEventHook
-                ],
-            startupHook = setFullscreenSupported
-          }
-        `additionalKeys` [ ((mod4Mask, xK_Escape), spawn "loginctl lock-session"),
-                           ((mod4Mask, xK_b), sendMessage ToggleStruts)
-                         ]
+  launch
+    . ewmh
+    . docks
+    $ def
+      { terminal = myTerminal,
+        modMask = mod4Mask,
+        layoutHook = myLayouts,
+        manageHook =
+          composeAll
+            [ manageHook def,
+              manageDocks,
+              isFullscreen --> doFullFloat,
+              scratchpadManageHook $ W.RationalRect 0.25 0.25 0.5 0.5
+            ],
+        handleEventHook =
+          composeAll
+            [ handleEventHook def,
+              fullscreenEventHook
+            ],
+        startupHook = setFullscreenSupported
+      }
+      `additionalKeys` [ ((mod4Mask, xK_p), spawn "rofi -show drun"),
+                         ((mod4Mask, xK_b), sendMessage ToggleStruts)
+                       ]
   where
     myTerminal = "kitty"
     myTiled = named "Tiled" $ reflectHoriz $ Tall 1 (3 / 100) (4 / 7)

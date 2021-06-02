@@ -15,10 +15,13 @@ let
     '';
 in {
   home.packages = with pkgs; [
+    cabal-install
     cargo
     cargo-edit
     clang-tools
+    ghc
     git-review
+    haskell-language-server
     hidden-shell
     kubectl
     kubernetes-helm
@@ -26,6 +29,7 @@ in {
     poetry
     python3
     rustc
+    stack
   ];
   programs = {
     vscode = {
@@ -44,6 +48,7 @@ in {
           file-icons.file-icons
           foxundermoon.shell-format
           github.vscode-pull-request-github
+          haskell.haskell
           jock.svg
           justusadam.language-haskell
           matklad.rust-analyzer
@@ -60,12 +65,20 @@ in {
           vscodevim.vim
           xaver.clang-format
           yzhang.markdown-all-in-one
-        ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [{
-          name = "nix-env-selector";
-          publisher = "arrterian";
-          version = "1.0.7";
-          sha256 = "0mralimyzhyp4x9q98x3ck64ifbjqdp8cxcami7clvdvkmf8hxhf";
-        }];
+        ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+          {
+            name = "nix-env-selector";
+            publisher = "arrterian";
+            version = "1.0.7";
+            sha256 = "0mralimyzhyp4x9q98x3ck64ifbjqdp8cxcami7clvdvkmf8hxhf";
+          }
+          {
+            name = "gruvbox-themes";
+            publisher = "tomphilbin";
+            version = "1.0.0";
+            sha256 = "0xykf120j27s0bmbqj8grxc79dzkh4aclgrpp1jz5kkm39400z0f";
+          }
+        ];
     };
     zsh = {
       enable = true;

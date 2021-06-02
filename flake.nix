@@ -6,6 +6,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
     dracula-sublime = {
       url = "github:dracula/sublime";
       flake = false;
@@ -35,25 +39,12 @@
         extraArgs = { inherit inputs; };
         modules = systemModules ++ [ ./laptop.nix ];
       };
-      defaultPackage = packages.iso;
-      packages.iso = nixosConfigurations.iso.config.system.build.isoImage;
-      nixosConfigurations.iso = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [ ./iso.nix ];
-      };
     } // flake-utils.lib.eachDefaultSystem (system:
       let pkgs = import nixpkgs { inherit system; };
-      in rec {
-        checks.check-format = pkgs.runCommand "check-format" {
-          buildInputs = with pkgs; [ nixpkgs-fmt ];
-        } ''
-          nixpkgs-fmt --check ${./.}
-          mkdir $out # success
-        '';
-
+      in {
         devShell = pkgs.mkShell {
           inputsFrom = [ (pkgs.haskellPackages.callPackage ./xmonad { }).env ];
-          nativeBuildInputs = with pkgs; [ nixpkgs-fmt ormolu ];
+          nativeBuildInputs = with pkgs; [ nixfmt ormolu ];
         };
       });
 }

@@ -5,18 +5,26 @@ let
   firaFont = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
   gpsm = with pkgs;
     writeShellScriptBin "gpsm" ''
-      ${findutils}/bin/find ~/.password-store/ -name '.git*' -prune -o -type d -print \
-      | ${gnused}/bin/sed "s|^$HOME/\.password-store/\(.*\)$|\1|" \
+      store="$HOME/.local/share/password-store"
+      ${findutils}/bin/find "$store" -name '.git*' -prune -o -type d -print \
+      | ${gnused}/bin/sed "s|^$store/\(.*\)$|\1|" \
       | ${gnugrep}/bin/grep -v '^$' \
-      | ${dmenu}/bin/dmenu \
+      | ${rofi}/bin/rofi -dmenu \
       | ${findutils}/bin/xargs ${pass}/bin/pass generate -c $@
     '';
-  psm = with pkgs;
-    writeShellScriptBin "psm" ''
-      ${findutils}/bin/find ~/.password-store/ -name '*.gpg' \
-      | ${gnused}/bin/sed "s|^$HOME/\.password-store/\(.*\)\.gpg$|\1|" \
-      | ${dmenu}/bin/dmenu \
-      | ${findutils}/bin/xargs ${pass}/bin/pass show -c"${"\${1-1}"}"
+  rofi-simple-pass = with pkgs;
+    writeShellScript "rofi-simple-pass" ''
+      if [ "$#" -gt 0 ]; then
+        pass -c $@ 1>/dev/null 2>&1
+      else
+        store="$HOME/.local/share/password-store"
+        ${findutils}/bin/find "$store" -name '*.gpg' \
+        | ${gnused}/bin/sed "s|^$store/\(.*\)\.gpg$|\1|"
+      fi
+    '';
+  rofiDmenu = with pkgs;
+    writeShellScriptBin "dmenu" ''
+      rofi -dmenu
     '';
   wallpapers = builtins.map builtins.fetchurl [
     {
@@ -67,7 +75,6 @@ in {
     brave
     cachix
     ccid
-    dmenu
     ffmpeg
     firaFont
     gimp
@@ -78,7 +85,7 @@ in {
     opensc
     pass
     pavucontrol
-    psm
+    rofiDmenu
     spotify
     unzip
     xclip
@@ -98,11 +105,26 @@ in {
       };
       settings.enable_audio_bell = "no";
       extraConfig = ''
-        include ${inputs.kitty-themes}/themes/Dracula.conf
+        include ${inputs.kitty-themes}/themes/gruvbox_dark.conf
       '';
     };
     zathura.enable = true;
     password-store.enable = true;
+    rofi = {
+      enable = true;
+      package = with pkgs;
+        rofi.override {
+          plugins = [ rofi-calc rofi-file-browser rofi-pass rofi-power-menu ];
+        };
+      pass.enable = true;
+      terminal = "kitty";
+      theme = "gruvbox-dark";
+      extraConfig = {
+        modi = "drun,run,file-browser,pass:${rofi-simple-pass},calc";
+        show-icons = true;
+        sidebar-mode = true;
+      };
+    };
   };
   services = {
     gpg-agent = {

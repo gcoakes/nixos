@@ -22,7 +22,7 @@
   "editor.fontLigatures": true,
   "workbench.productIconTheme": "icons-carbon",
   "workbench.iconTheme": "file-icons",
-  "workbench.colorTheme": "Dracula",
+  "workbench.colorTheme": "Gruvbox Dark (Hard)",
   "workbench.enableExperiments": false,
   "workbench.settings.enableNaturalLanguageSearch": false,
   "update.mode": "none",
@@ -30,5 +30,22 @@
   "extensions.autoCheckUpdates": false,
   "extensions.autoUpdate": false,
   "git.autofetch": false,
-  "python.showStartPage": false
+  "python.showStartPage": false,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
+    }
+  ],
+  "vim.handleKeys": {
+    "<C-d>": true,
+    "<C-f>": false,
+    "<C-b>": false,
+    "<C-h>": false
+  },
+  "editor.autoClosingBrackets": "never",
+  "editor.autoClosingQuotes": "never",
+  "html.autoClosingTags": false,
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix"
 }
