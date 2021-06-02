@@ -89,6 +89,7 @@ in {
     spotify
     unzip
     xclip
+    xorg.xmessage
     yarn
     zip
     zstd

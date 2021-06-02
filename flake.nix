@@ -44,7 +44,7 @@
       in {
         devShell = pkgs.mkShell {
           inputsFrom = [ (pkgs.haskellPackages.callPackage ./xmonad { }).env ];
-          nativeBuildInputs = with pkgs; [ nixfmt ormolu ];
+          nativeBuildInputs = with pkgs; [ nixfmt stylish-haskell ];
         };
       });
 }
