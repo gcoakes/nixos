@@ -91,7 +91,9 @@ main' dbus =
         ] ^++^
       keySet "Workspaces" switchWsById ^++^
       keySet "System"
-        [ key "Toggle status bar gap" (modm              , xK_b ) $ sendMessage ToggleStruts
+        [ key "Toggle status bar gap" (modm              , xK_b ) $ do
+            spawn "polybar-msg cmd toggle"
+            sendMessage ToggleStruts
         , key "Logout (quit XMonad)"  (modm .|. shiftMask, xK_q ) $ io exitSuccess
         ] ^++^
       keySet "Audio"

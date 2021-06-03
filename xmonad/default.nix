@@ -58,7 +58,7 @@ let
 in runCommandNoCCLocal "xmonad-config" { buildInputs = [ makeWrapper ]; } ''
   mkdir -p "$out/bin"
   makeWrapper "${unwrapped}/bin/xmonad-config" "$out/bin/xmonad-config" \
-    --prefix PATH : "${tray-start}/bin:${xorg.xsetroot}/bin:${pulseaudio}/bin:${wallpaper-start}/bin"
+    --prefix PATH : "${tray-start}/bin:${xorg.xsetroot}/bin:${pulseaudio}/bin:${wallpaper-start}/bin:${polybar}/bin"
 '' // {
   inherit (unwrapped) env;
 }
