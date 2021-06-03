@@ -26,28 +26,6 @@ let
     writeShellScriptBin "dmenu" ''
       rofi -dmenu
     '';
-  wallpapers = builtins.map builtins.fetchurl [
-    {
-      url = "https://i.redd.it/u5wugt3u42761.png";
-      sha256 = "12g7q1lkkawmswh3xa6lq1cjyxcdck2yvq2xipcrh1lq2s8g0xsp";
-    }
-    {
-      url = "https://i.imgur.com/hyt5lCu.jpg";
-      sha256 = "1mrq6qzm298wm2zpvaziascivvrfa8yywg9i3f4fb25msgv4grfz";
-    }
-    {
-      url = "https://i.imgur.com/cDvIVbE.jpg";
-      sha256 = "0xrdcgmbyf1zhi96qmrmfnsc85w47frjk8abbdlgkvwram75cqlw";
-    }
-    {
-      url = "https://i.imgur.com/eozPPEI.jpg";
-      sha256 = "05qinkfw8giqn1qcy1zz4fdx6gs72iq883nxx4diya8x24vgls2v";
-    }
-  ];
-  wallpapersDirectory = pkgs.linkFarm "wallpapers" (builtins.map (w: {
-    name = builtins.baseNameOf w;
-    path = w;
-  }) wallpapers);
 in {
   imports = [
     (import ./dev-env.nix {
@@ -133,11 +111,6 @@ in {
       defaultCacheTtl = 86400;
       enableSshSupport = true;
       sshKeys = [ "3310F4B460D1579E7BAD6684D9E9B9083B574282" ];
-    };
-    random-background = {
-      enable = true;
-      interval = "1h";
-      imageDirectory = "${wallpapersDirectory}";
     };
     pass-secret-service.enable = true;
   };

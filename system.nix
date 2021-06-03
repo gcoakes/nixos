@@ -101,6 +101,14 @@ in {
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
+  services.picom = {
+    enable = true;
+    activeOpacity = 0.85;
+    fade = true;
+    inactiveOpacity = 0.8;
+    opacityRules = [ "100:class_g = 'brave-browser'" "50:class_g = 'polybar'" ];
+  };
+
   virtualisation.docker.enable = true;
 
   #########################
