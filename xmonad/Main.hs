@@ -1,30 +1,32 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-import qualified Codec.Binary.UTF8.String   as UTF8
+import qualified Codec.Binary.UTF8.String     as UTF8
 import           Control.Monad
 import           Data.List
-import qualified Data.Map                   as M
+import qualified Data.Map                     as M
 import           Data.Maybe
+import           Graphics.X11.ExtraTypes.XF86
+import           System.Exit                  (exitSuccess)
 import           XMonad
-import           XMonad.Hooks.DynamicLog    (PP (..), dynamicLogWithPP, wrap)
-import           XMonad.Hooks.EwmhDesktops  (ewmh, fullscreenEventHook)
+import           XMonad.Hooks.DynamicLog      (PP (..), dynamicLogWithPP, wrap)
+import           XMonad.Hooks.EwmhDesktops    (ewmh, fullscreenEventHook)
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.ManageHelpers
 import           XMonad.Layout.BinaryColumn
-import           XMonad.Layout.Decoration   (Theme (..))
-import           XMonad.Layout.Named        (named)
-import           XMonad.Layout.NoBorders    (noBorders)
-import           XMonad.Layout.Reflect      (reflectHoriz)
-import           XMonad.Layout.Spacing      (Border (..), spacingRaw)
-import qualified XMonad.StackSet            as W
-import qualified XMonad.Util.CustomKeys     as C
+import           XMonad.Layout.Decoration     (Theme (..))
+import           XMonad.Layout.Named          (named)
+import           XMonad.Layout.NoBorders      (noBorders)
+import           XMonad.Layout.Reflect        (reflectHoriz)
+import           XMonad.Layout.Spacing        (Border (..), spacingRaw)
+import qualified XMonad.StackSet              as W
+import qualified XMonad.Util.CustomKeys       as C
 import           XMonad.Util.EZConfig
-import           XMonad.Util.Font           (Align (AlignLeft, AlignRightOffset))
-import           XMonad.Util.NamedActions   (addDescrKeys', addName, subtitle,
-                                             xMessage, (^++^))
-import           XMonad.Util.Scratchpad     (scratchpadManageHook,
-                                             scratchpadSpawnActionCustom)
+import           XMonad.Util.Font             (Align (AlignLeft, AlignRightOffset))
+import           XMonad.Util.NamedActions     (addDescrKeys', addName, subtitle,
+                                               xMessage, (^++^))
+import           XMonad.Util.Scratchpad       (scratchpadManageHook,
+                                               scratchpadSpawnActionCustom)
 
 main =
   launch
@@ -49,9 +51,6 @@ main =
             ],
         startupHook = setFullscreenSupported
       }
-      `additionalKeys` [ ((mod4Mask, xK_p), spawn "rofi -show drun"),
-                         ((mod4Mask, xK_b), sendMessage ToggleStruts)
-                       ]
   where
     myKeys conf@XConfig {XMonad.modMask = modm} =
       keySet "Launchers"
@@ -76,7 +75,21 @@ main =
         , key "Shrink master"   (modm              , xK_h        ) $ sendMessage Shrink
         , key "Expand master"   (modm              , xK_l        ) $ sendMessage Expand
         , key "Switch to tile"  (modm              , xK_t        ) $ withFocused (windows . W.sink)
+        ] ^++^
+      keySet "System"
+        [ key "Toggle status bar gap" (modm              , xK_b ) $ sendMessage ToggleStruts
+        , key "Logout (quit XMonad)"  (modm .|. shiftMask, xK_q ) $ io exitSuccess
+        ] ^++^
+      keySet "Audio"
+        [ key "Mute"          (0, xF86XK_AudioMute              ) $ spawn "amixer -q set Master toggle"
+        , key "Lower volume"  (0, xF86XK_AudioLowerVolume       ) $ spawn "amixer -q set Master 5%-"
+        , key "Raise volume"  (0, xF86XK_AudioRaiseVolume       ) $ spawn "amixer -q set Master 5%+"
+        , key "Play / Pause"  (0, xF86XK_AudioPlay              ) $ spawn $ playerctl "play-pause"
+        , key "Stop"          (0, xF86XK_AudioStop              ) $ spawn $ playerctl "stop"
+        , key "Previous"      (0, xF86XK_AudioPrev              ) $ spawn $ playerctl "previous"
+        , key "Next"          (0, xF86XK_AudioNext              ) $ spawn $ playerctl "next"
         ]
+    playerctl c  = "playerctl --player=spotify,%any " <> c
     key n k a = (k, addName n a)
     keySet s ks = subtitle s : ks
     action m = if m == shiftMask then "Move to " else "Switch to "
