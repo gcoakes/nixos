@@ -34,7 +34,9 @@
       let pkgs = import nixpkgs { inherit system; };
       in {
         devShell = pkgs.mkShell {
-          inputsFrom = [ (pkgs.haskellPackages.callPackage ./xmonad { }).env ];
+          inputsFrom = [
+            (pkgs.haskellPackages.callPackage ./overlays/xmonad-config { }).env
+          ];
           nativeBuildInputs = with pkgs; [ nixfmt stylish-haskell ];
         };
       });
