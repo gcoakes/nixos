@@ -14,7 +14,6 @@ import           XMonad
 import           XMonad.Hooks.DynamicLog      (PP (..), dynamicLogWithPP,
                                                shorten, wrap)
 import           XMonad.Hooks.EwmhDesktops    (ewmh, fullscreenEventHook)
-import           XMonad.Hooks.FadeInactive    (fadeInactiveLogHook)
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.ManageHelpers
 import           XMonad.Layout.BinaryColumn
@@ -49,7 +48,7 @@ main' dbus =
         spawn "@trayStart@/bin/trayStart"
         spawn "@xsetroot@/bin/xsetroot -cursor_name left_ptr"
         spawn "@wallpaperStart@/bin/wallpaperStart"
-      , logHook = fadeInactiveLogHook 0.9 <+> polybarLogHook dbus
+      , logHook = polybarLogHook dbus
       , layoutHook = myLayouts
       , manageHook =
           composeAll

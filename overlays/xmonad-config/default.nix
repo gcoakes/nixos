@@ -26,11 +26,9 @@ let
       || exit 1
     fi
     ${xwinwrap}/bin/xwinwrap \
-      -d Desktop \
       -ov \
       -g "$(${xorg.xrandr}/bin/xrandr -q | ${gnugrep}/bin/grep primary | ${coreutils}/bin/cut -f4 -d' ')" \
-      -- ${mpv}/bin/mpv \
-        -wid WID \
+      -- ${video-wallpaper} WID \
         --loop \
         --no-audio \
         --no-input-terminal \
@@ -42,6 +40,13 @@ let
         --quiet \
         --vf=hflip \
         "$live_wallpaper"
+  '';
+  video-wallpaper = writeShellScript "video-wallpaper" ''
+    wid="$1"
+    shift
+    ${xorg.xprop}/bin/xprop -id "$wid" -f WM_CLASS 8s -set WM_CLASS Desktop
+    ${xorg.xprop}/bin/xprop -id "$wid" -f _NET_WM_WINDOW_OPACITY 32c -set _NET_WM_WINDOW_OPACITY 0xffffffff
+    exec ${mpv}/bin/mpv --wid="$wid" $@
   '';
   wallpaper-still = fetchurl {
     url = "https://i.redd.it/2mcofpxwd2z61.jpg";

@@ -172,12 +172,16 @@ in {
 
   services.picom = {
     enable = true;
-    activeOpacity = 0.85;
+    activeOpacity = 0.93;
     fade = true;
     inactiveOpacity = 0.8;
     opacityRules = [
+      "100:_NET_WM_STATE@[0]:32a *= '_NET_WM_STATE_FULLSCREEN'"
+      "100:_NET_WM_STATE@[1]:32a *= '_NET_WM_STATE_FULLSCREEN'"
+      "100:_NET_WM_STATE@[2]:32a *= '_NET_WM_STATE_FULLSCREEN'"
+      "100:_NET_WM_STATE@[3]:32a *= '_NET_WM_STATE_FULLSCREEN'"
+      "100:_NET_WM_STATE@[4]:32a *= '_NET_WM_STATE_FULLSCREEN'"
       "100:class_g = 'brave-browser'"
-      "100:class_g = 'Desktop'"
       "50:class_g = 'polybar'"
     ];
   };
