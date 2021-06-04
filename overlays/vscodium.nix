@@ -57,10 +57,14 @@ in {
         settings="${
           "$"
         }{XDG_CONFIG_HOME-$HOME/.config}/VSCodium/User/settings.json"
-        ${jq}/bin/jq -s '.[0] * .[1]' "${
-          ../.vscode/settings.json
-        }" "$settings" \
-        | ${moreutils}/bin/sponge "$settings"
+        if [ -f "$settings" ]; then
+          ${jq}/bin/jq -s '.[0] * .[1]' "${
+            ../.vscode/settings.json
+          }" "$settings" \
+          | ${moreutils}/bin/sponge "$settings"
+        else
+          cp "${../.vscode/settings.json}" "$settings"
+        fi
         exec "${myCodium}/bin/codium" $@
       '';
       path = [ clang-tools haskell-language-server nixfmt ];
