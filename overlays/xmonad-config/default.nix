@@ -1,23 +1,24 @@
-{ lib, mkDerivation, X11, xmonad, xmonad-contrib, xmonad-extras, xmonad-log
-, dbus, containers, utf8-string, polybar, makeWrapper, writeShellScript
+{ lib, mkDerivation, containers, dbus, utf8-string, X11, xmonad, xmonad-contrib
+, xmonad-extras, xmonad-log, polybar, makeWrapper, writeShellScript
 , writeShellScriptBin, runCommandNoCCLocal, copyPathToStore, xorg, pavucontrol
-, pulseaudio, mpv, xwinwrap, youtube-dl, feh, coreutils, gnugrep }:
+, pulseaudio, mpv, xwinwrap, youtube-dl, feh, coreutils, gnugrep, fetchurl
+, kitty, rofi }:
 let
-  tray-start-script = writeShellScript "tray-start" ''
+  trayStartScript = writeShellScript "trayStart" ''
     ${polybar-alsa}/bin/polybar -c ${./polybar.ini} top &
     ${polybar-alsa}/bin/polybar -c ${./polybar.ini} bottom &
   '';
-  tray-start =
-    runCommandNoCCLocal "tray-start" { buildInputs = [ makeWrapper ]; } ''
+  trayStart =
+    runCommandNoCCLocal "trayStart" { buildInputs = [ makeWrapper ]; } ''
       mkdir -p "$out/bin"
-      makeWrapper "${tray-start-script}" "$out/bin/tray-start" \
+      makeWrapper "${trayStartScript}" "$out/bin/trayStart" \
         --prefix PATH : "${xmonad-log}/bin:${pavucontrol}/bin:${pulseaudio}/bin"
     '';
   polybar-alsa = polybar.override {
     pulseSupport = true;
     mpdSupport = true;
   };
-  wallpaper-start = writeShellScriptBin "wallpaper-start" ''
+  wallpaperStart = writeShellScriptBin "wallpaperStart" ''
     live_wallpaper="${"$"}{XDG_DATA_HOME-$HOME/.local/share}/wallpaper.webm"
     ${feh}/bin/feh --bg-fill ${wallpaper-still}
     if [ ! -f "$live_wallaper" ]; then
@@ -25,6 +26,7 @@ let
       || exit 1
     fi
     ${xwinwrap}/bin/xwinwrap \
+      -d Desktop \
       -ov \
       -g "$(${xorg.xrandr}/bin/xrandr -q | ${gnugrep}/bin/grep primary | ${coreutils}/bin/cut -f4 -d' ')" \
       -- ${mpv}/bin/mpv \
@@ -41,24 +43,28 @@ let
         --vf=hflip \
         "$live_wallpaper"
   '';
-  wallpaper-still = builtins.fetchurl {
+  wallpaper-still = fetchurl {
     url = "https://i.redd.it/2mcofpxwd2z61.jpg";
     sha256 = "0ag0abrmigi80xc4c86iv7fdf28nr6qf80k9aqha82gk115w035x";
   };
-  unwrapped = mkDerivation {
-    pname = "xmonad-config";
-    version = "0.1.0.0";
-    src = ./.;
-    isLibrary = false;
-    isExecutable = true;
-    executableHaskellDepends =
-      [ containers dbus utf8-string X11 xmonad xmonad-contrib xmonad-extras ];
-    license = lib.licenses.gpl3;
-  };
-in runCommandNoCCLocal "xmonad-config" { buildInputs = [ makeWrapper ]; } ''
-  mkdir -p "$out/bin"
-  makeWrapper "${unwrapped}/bin/xmonad-config" "$out/bin/xmonad-config" \
-    --prefix PATH : "${tray-start}/bin:${xorg.xsetroot}/bin:${pulseaudio}/bin:${wallpaper-start}/bin:${polybar}/bin"
-'' // {
-  inherit (unwrapped) env;
+in mkDerivation {
+  pname = "xmonad-config";
+  version = "0.1.0.0";
+  src = ./.;
+  isLibrary = false;
+  isExecutable = true;
+  executableHaskellDepends =
+    [ containers dbus utf8-string X11 xmonad xmonad-contrib xmonad-extras ];
+  license = lib.licenses.gpl3;
+  patchPhase = ''
+    substituteInPlace Main.hs \
+      --subst-var-by rofi ${rofi} \
+      --subst-var-by polybar ${polybar-alsa} \
+      --subst-var-by kitty ${kitty} \
+      --subst-var-by wallpaperStart ${wallpaperStart} \
+      --subst-var-by pulseaudio ${pulseaudio} \
+      --subst-var-by xsetroot ${xorg.xsetroot} \
+      --subst-var-by trayStart ${trayStart}
+    cat Main.hs
+  '';
 }

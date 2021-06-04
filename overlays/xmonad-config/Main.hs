@@ -46,9 +46,9 @@ main' dbus =
       , workspaces = ["\xf6c9", "\xf6ca", "\xf6cb", "\xf6cc", "\xf6cd", "\xf6ce"]
       , startupHook = do
         setFullscreenSupported
-        spawn "tray-start"
-        spawn "xsetroot -cursor_name left_ptr"
-        spawn "wallpaper-start"
+        spawn "@trayStart@/bin/trayStart"
+        spawn "@xsetroot@/bin/xsetroot -cursor_name left_ptr"
+        spawn "@wallpaperStart@/bin/wallpaperStart"
       , logHook = fadeInactiveLogHook 0.9 <+> polybarLogHook dbus
       , layoutHook = myLayouts
       , manageHook =
@@ -68,7 +68,7 @@ main' dbus =
     myKeys conf@XConfig {XMonad.modMask = modm} =
       keySet "Launchers"
         [ key "Terminal" (modm .|. shiftMask, xK_Return) $ spawn (XMonad.terminal conf)
-        , key "Apps (Rofi)" (modm, xK_p) $ spawn "rofi -show drun"
+        , key "Apps (Rofi)" (modm, xK_p) $ spawn "@rofi@/bin/rofi -show drun"
         ] ^++^
       keySet "Layouts"
         [ key "Next" (modm, xK_space) $ sendMessage NextLayout
@@ -92,7 +92,7 @@ main' dbus =
       keySet "Workspaces" switchWsById ^++^
       keySet "System"
         [ key "Toggle status bar gap" (modm              , xK_b ) $ do
-            spawn "polybar-msg cmd toggle"
+            spawn "@polybar@/bin/polybar-msg cmd toggle"
             sendMessage ToggleStruts
         , key "Logout (quit XMonad)"  (modm .|. shiftMask, xK_q ) $ io exitSuccess
         ] ^++^
@@ -111,12 +111,12 @@ main' dbus =
         [ key (action m <> show i) (m .|. modm, k) (windows $ f i)
             | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
             , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    pactlSetSink attr opt = "pactl set-sink-" <> attr <> " @DEFAULT_SINK@ " <> opt
-    playerctl c  = "playerctl --player=spotify,%any " <> c
+    pactlSetSink attr opt = "@pulseaudio@/bin/pactl set-sink-" <> attr <> " @DEFAULT_SINK@ " <> opt
+    playerctl c  = "@playerctl@/bin/playerctl --player=spotify,%any " <> c
     key n k a = (k, addName n a)
     keySet s ks = subtitle s : ks
     action m = if m == shiftMask then "Move to " else "Switch to "
-    myTerminal = "kitty"
+    myTerminal = "@kitty@/bin/kitty"
     myTiled = named "Tiled" $ reflectHoriz $ Tall 1 (3 / 100) (4 / 7)
     myLayouts =
       avoidStruts

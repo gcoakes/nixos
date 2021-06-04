@@ -1,17 +1,9 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = {
       url = "github:edolstra/flake-compat";
-      flake = false;
-    };
-    dracula-sublime = {
-      url = "github:dracula/sublime";
       flake = false;
     };
     kitty-themes = {
@@ -24,21 +16,20 @@
       flake = false;
     };
   };
-  outputs = { self, nixpkgs, home-manager, flake-utils, ... }@inputs:
-    let
-      systemModules =
-        [ ./common.nix ./system.nix home-manager.nixosModules.home-manager ];
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    let sharedModules = [ (import ./modules) ./common.nix ];
     in rec {
       nixosConfigurations.workstation = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        modules = sharedModules ++ [ ./system/workstation.nix ];
         extraArgs = { inherit inputs; };
-        modules = systemModules ++ [ ./workstation.nix ];
       };
       nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        modules = sharedModules ++ [ ./system/laptop.nix ];
         extraArgs = { inherit inputs; };
-        modules = systemModules ++ [ ./laptop.nix ];
       };
+      nixosModule = import ./modules;
     } // flake-utils.lib.eachDefaultSystem (system:
       let pkgs = import nixpkgs { inherit system; };
       in {
