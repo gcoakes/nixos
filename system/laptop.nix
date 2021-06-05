@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }: {
   services.xserver = {
     libinput = {
-      enable = true;
       touchpad = {
-        accelProfile = "flat";
+        accelProfile = "adaptive";
         tapping = true;
       };
     };
+    xautolock.time = 1;
   };
 
   networking.hostName = "laptop";

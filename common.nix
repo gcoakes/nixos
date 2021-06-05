@@ -102,19 +102,25 @@ in {
     "/" = {
       label = "nixos";
       fsType = "btrfs";
-      options = [ "compress=lzo,discard,noatime,subvol=@" ];
+      options = [ "compress=lzo" "discard" "noatime" "subvol=@" ];
     };
 
     "/home" = {
       label = "nixos";
       fsType = "btrfs";
-      options = [ "compress=lzo,discard,noatime,subvol=@home" ];
+      options = [ "compress=lzo" "discard" "noatime" "subvol=@home" ];
     };
 
     "/nix" = {
       label = "nixos";
       fsType = "btrfs";
-      options = [ "compress=lzo,discard,noatime,subvol=@nix" ];
+      options = [ "compress=lzo" "discard" "noatime" "subvol=@nix" ];
+    };
+
+    "/var/log" = {
+      label = "nixos";
+      fsType = "btrfs";
+      options = [ "compress=lzo" "discard" "noatime" "subvol=@log" ];
     };
 
     "/boot" = {
@@ -184,6 +190,18 @@ in {
       "100:class_g = 'brave-browser'"
       "50:class_g = 'polybar'"
     ];
+    backend = "glx";
+    settings = { no-fading-openclose = true; };
+  };
+
+  programs.xss-lock = {
+    enable = true;
+    lockerCommand = "${pkgs.i3lock-fancy}/bin/i3lock-fancy";
+  };
+
+  services.xserver.xautolock = {
+    enable = true;
+    locker = "/run/current-system/systemd/bin/systemctl suspend";
   };
 
   services.pass-secret-service.enable = true;

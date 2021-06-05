@@ -19,27 +19,24 @@ let
     mpdSupport = true;
   };
   wallpaperStart = writeShellScriptBin "wallpaperStart" ''
-    live_wallpaper="${"$"}{XDG_DATA_HOME-$HOME/.local/share}/wallpaper.webm"
     ${feh}/bin/feh --bg-fill ${wallpaper-still}
-    if [ ! -f "$live_wallaper" ]; then
-      ${youtube-dl}/bin/youtube-dl -f webm -o "$live_wallpaper" https://www.youtube.com/watch?v=m4P9XkF9gsI \
-      || exit 1
+    live_wallpaper="${"$"}{XDG_DATA_HOME-$HOME/.local/share}/wallpaper.webm"
+    if [ -f "$live_wallaper" ]; then
+      ${xwinwrap}/bin/xwinwrap \
+        -ov \
+        -g "$(${xorg.xrandr}/bin/xrandr -q | ${gnugrep}/bin/grep primary | ${coreutils}/bin/cut -f4 -d' ')" \
+        -- ${video-wallpaper} WID \
+          --loop \
+          --no-audio \
+          --no-input-terminal \
+          --no-input-cursor \
+          --no-osd-bar \
+          --cursor-autohide=no \
+          --no-osc \
+          --quiet \
+          --vf=hflip \
+          "$live_wallpaper"
     fi
-    ${xwinwrap}/bin/xwinwrap \
-      -ov \
-      -g "$(${xorg.xrandr}/bin/xrandr -q | ${gnugrep}/bin/grep primary | ${coreutils}/bin/cut -f4 -d' ')" \
-      -- ${video-wallpaper} WID \
-        --loop \
-        --no-audio \
-        --no-input-terminal \
-        --no-input-cursor \
-        --no-osd-bar \
-        --cursor-autohide=no \
-        --no-osc \
-        --speed=0.75 \
-        --quiet \
-        --vf=hflip \
-        "$live_wallpaper"
   '';
   video-wallpaper = writeShellScript "video-wallpaper" ''
     wid="$1"
@@ -49,8 +46,8 @@ let
     exec ${mpv}/bin/mpv --wid="$wid" $@
   '';
   wallpaper-still = fetchurl {
-    url = "https://i.redd.it/2mcofpxwd2z61.jpg";
-    sha256 = "0ag0abrmigi80xc4c86iv7fdf28nr6qf80k9aqha82gk115w035x";
+    url = "https://i.imgur.com/hyt5lCu.jpg";
+    hash = "sha256-3+VH9tO1iOWIGzE97j1SLu8dmVbxq32/qBwlUT82ONc=";
   };
 in mkDerivation {
   pname = "xmonad-config";
