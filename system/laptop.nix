@@ -12,35 +12,31 @@
   networking.hostName = "laptop";
   networking.dhcpcd.wait = "background";
 
-  swapDevices = [{
-    encrypted = {
-      enable = true;
-      blkDev =
-        "/dev/disk/by-id/nvme-SKHynix_HFS256GD9TNG-L3A0B_AD99N802310409U50-part3";
-      # /mnt-root is the location where / will be mounted in stage 1.
-      keyFile = "/mnt-root/.swap-keyfile";
-      # This is the /dev/mapper/<label> not the filesystem level label.
-      label = "swap";
-    };
-    # Filesystem label.
-    label = "swap";
-  }];
+  swapDevices = [{ label = "swap"; }];
 
   boot = {
     initrd = {
       supportedFilesystems = [ "btrfs" ];
       availableKernelModules = [ "nvme" "btrfs" ];
       luks = {
+        reusePassphrases = true;
         gpgSupport = true;
-        devices.nixos = {
-          device =
-            "/dev/disk/by-id/nvme-SKHynix_HFS256GD9TNG-L3A0B_AD99N802310409U50-part2";
-          allowDiscards = true;
-          bypassWorkqueues = true;
-          gpgCard = {
-            encryptedPass = ../luks-passphrase.asc;
-            publicKey = ../public.asc;
+        devices = let
+          addCommon = label: device: {
+            inherit device;
+            preLVM = true;
+            allowDiscards = true;
+            bypassWorkqueues = true;
+            gpgCard = {
+              encryptedPass = ../luks-passphrase.asc;
+              publicKey = ../public.asc;
+            };
           };
+        in lib.mapAttrs addCommon {
+          nixos =
+            "/dev/disk/by-id/nvme-SKHynix_HFS256GD9TNG-L3A0B_AD99N802310409U50-part2";
+          swap =
+            "/dev/disk/by-id/nvme-SKHynix_HFS256GD9TNG-L3A0B_AD99N802310409U50-part3";
         };
       };
     };
