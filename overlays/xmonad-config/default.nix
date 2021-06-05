@@ -4,20 +4,6 @@
 , pulseaudio, mpv, xwinwrap, youtube-dl, feh, coreutils, gnugrep, fetchurl
 , kitty, rofi }:
 let
-  trayStartScript = writeShellScript "trayStart" ''
-    ${polybar-alsa}/bin/polybar -c ${./polybar.ini} top &
-    ${polybar-alsa}/bin/polybar -c ${./polybar.ini} bottom &
-  '';
-  trayStart =
-    runCommandNoCCLocal "trayStart" { buildInputs = [ makeWrapper ]; } ''
-      mkdir -p "$out/bin"
-      makeWrapper "${trayStartScript}" "$out/bin/trayStart" \
-        --prefix PATH : "${xmonad-log}/bin:${pavucontrol}/bin:${pulseaudio}/bin"
-    '';
-  polybar-alsa = polybar.override {
-    pulseSupport = true;
-    mpdSupport = true;
-  };
   wallpaperStart = writeShellScriptBin "wallpaperStart" ''
     ${feh}/bin/feh --bg-fill ${wallpaper-still}
     live_wallpaper="${"$"}{XDG_DATA_HOME-$HOME/.local/share}/wallpaper.webm"
@@ -61,12 +47,10 @@ in mkDerivation {
   patchPhase = ''
     substituteInPlace Main.hs \
       --subst-var-by rofi ${rofi} \
-      --subst-var-by polybar ${polybar-alsa} \
+      --subst-var-by polybar ${polybar} \
       --subst-var-by kitty ${kitty} \
       --subst-var-by wallpaperStart ${wallpaperStart} \
       --subst-var-by pulseaudio ${pulseaudio} \
-      --subst-var-by xsetroot ${xorg.xsetroot} \
-      --subst-var-by trayStart ${trayStart}
-    cat Main.hs
+      --subst-var-by xsetroot ${xorg.xsetroot}
   '';
 }

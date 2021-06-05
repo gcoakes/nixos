@@ -176,6 +176,20 @@ in {
 
   services.flatpak.enable = true;
 
+  services.polybar = {
+    enable = true;
+    package = pkgs.polybar.override {
+      pulseSupport = true;
+      mpdSupport = true;
+    };
+    script = ''
+      polybar top &
+      polybar bottom &
+    '';
+    extraConfig = builtins.readFile ./polybar.ini;
+    extraPackages = with pkgs; [ xmonad-log pulseaudio pavucontrol ];
+  };
+
   services.picom = {
     enable = true;
     activeOpacity = 0.93;
