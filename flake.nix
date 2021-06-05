@@ -6,6 +6,10 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
+    picom = {
+      url = "github:ibhagwan/picom";
+      flake = false;
+    };
     kitty-themes = {
       url = "github:dexpota/kitty-themes";
       flake = false;

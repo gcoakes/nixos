@@ -5,4 +5,5 @@ map (path: import path inputs) [
   ./kitty.nix
   ./rofi.nix
   ./xmonad-config.nix
+  ./picom.nix
 ]
