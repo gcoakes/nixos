@@ -55,8 +55,7 @@ main' dbus =
         workspaces = ["\xf6c9", "\xf6ca", "\xf6cb", "\xf6cc", "\xf6cd", "\xf6ce"],
         startupHook = do
           setFullscreenSupported
-          spawn "@xsetroot@/bin/xsetroot -cursor_name left_ptr"
-          spawn "@wallpaperStart@/bin/wallpaperStart",
+          spawn "@xsetroot@/bin/xsetroot -cursor_name left_ptr",
         logHook = polybarLogHook dbus,
         layoutHook = myLayouts,
         manageHook =

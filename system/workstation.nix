@@ -79,4 +79,13 @@
       monitorConfig = ''Option "Rotate" "right"'';
     }
   ];
+
+  services.live-wallpaper = {
+    enable = true;
+    url = "https://www.youtube.com/watch?v=Q_ax6tgU-20";
+    fallback = pkgs.fetchurl {
+      url = "https://i.imgur.com/hyt5lCu.jpg";
+      hash = "sha256-3+VH9tO1iOWIGzE97j1SLu8dmVbxq32/qBwlUT82ONc=";
+    };
+  };
 }

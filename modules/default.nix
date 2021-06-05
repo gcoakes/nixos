@@ -7,5 +7,6 @@
     ./lsd.nix
     ./pass.nix
     ./polybar.nix
+    ./live-wallpaper.nix
   ];
 }
