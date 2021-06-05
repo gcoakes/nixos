@@ -75,13 +75,30 @@
         "type": "github"
       }
     },
+    "picom": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1612850420,
+        "narHash": "sha256-PDQnWB6Gkc/FHNq0L9VX2VBcZAE++jB8NkoLQqH9J9Q=",
+        "owner": "ibhagwan",
+        "repo": "picom",
+        "rev": "60eb00ce1b52aee46d343481d0530d5013ab850b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ibhagwan",
+        "repo": "picom",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "dod-pki": "dod-pki",
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
         "kitty-themes": "kitty-themes",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "picom": "picom"
       }
     }
   },
