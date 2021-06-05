@@ -232,6 +232,8 @@ in {
     locker = "/run/current-system/systemd/bin/systemctl suspend";
   };
 
+  services.logind.lidSwitch = "suspend-then-hibernate";
+
   services.pass-secret-service.enable = true;
 
   virtualisation.docker.enable = true;

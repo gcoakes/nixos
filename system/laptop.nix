@@ -9,6 +9,16 @@
     xautolock.time = 1;
   };
 
+  powerManagement = {
+    powertop.enable = true;
+    cpuFreqGovernor = "powersave";
+  };
+
+  services.upower = {
+    enable = true;
+    criticalPowerAction = "Hibernate";
+  };
+
   networking.hostName = "laptop";
   networking.dhcpcd.wait = "background";
 
