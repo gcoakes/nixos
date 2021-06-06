@@ -6,4 +6,5 @@ map (path: import path inputs) [
   ./rofi.nix
   ./xmonad-config.nix
   ./picom.nix
+  ./qutebrowser.nix
 ]

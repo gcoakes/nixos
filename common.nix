@@ -68,7 +68,6 @@ in {
       [ ./ssh-laptop.pub ./ssh-workstation.pub ];
     initialPassword = "P@ssw0rd";
     packages = with pkgs; [
-      brave
       cargo
       cargo-edit
       discord
@@ -84,6 +83,7 @@ in {
       pass
       pavucontrol
       poetry
+      qutebrowser
       spotify
       unzip
       vscodium
@@ -296,6 +296,8 @@ in {
   #########################
   ######## Desktop ########
   #########################
+
+  environment.etc."xdg/mimeapps.list".source = ./mimeapps.list;
 
   sound.enable = true;
 
