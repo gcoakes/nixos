@@ -82,7 +82,7 @@
     ];
     wallpaper.live = {
       enable = true;
-      url = "https://www.youtube.com/watch?v=Q_ax6tgU-20";
+      url = "https://www.youtube.com/watch?v=sNZKRC_E8xY";
     };
   };
 }
