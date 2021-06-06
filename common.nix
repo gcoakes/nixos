@@ -207,6 +207,7 @@ in {
               exit 0
             fi
           done
+          echo
         '';
       in [ xmonad-log pulseaudio pavucontrol playerctl mpris-meta ];
   };
