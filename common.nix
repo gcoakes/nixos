@@ -62,7 +62,8 @@ in {
     createHome = true;
     isNormalUser = true;
     group = "users";
-    extraGroups = [ "wheel" "audio" "docker" "networkmanager" "adbusers" ];
+    extraGroups =
+      [ "input" "wheel" "audio" "docker" "networkmanager" "adbusers" ];
     openssh.authorizedKeys.keyFiles =
       [ ./ssh-laptop.pub ./ssh-workstation.pub ];
     initialPassword = "P@ssw0rd";
