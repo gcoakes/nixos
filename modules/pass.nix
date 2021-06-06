@@ -12,14 +12,14 @@ in {
     };
     path = mkOption {
       type = types.str;
-      default = "%h/.password-store";
+      default = "$HOME/.password-store";
     };
   };
   config = mkIf cfg.enable {
     systemd.user.services.pass-secret-service = {
       enable = true;
       description = "Pass libsecret service";
-      script = "${cfg.package}/bin/pass_secret_service --path '${cfg.path}'";
+      script = ''${cfg.package}/bin/pass_secret_service --path "${cfg.path}"'';
       wantedBy = [ "default.target" ];
     };
   };
