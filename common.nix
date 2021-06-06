@@ -189,7 +189,26 @@ in {
       polybar bottom &
     '';
     extraConfig = builtins.readFile ./polybar.ini;
-    extraPackages = with pkgs; [ xmonad-log pulseaudio pavucontrol ];
+    extraPackages = with pkgs;
+      let
+        mpris-meta = writeShellScriptBin "mpris-meta" ''
+          playerctl -ls | while read player; do
+            if [ "$(playerctl -sp "$player" status)" = Playing ]; then
+              case "$player" in
+                spotify*)  icon='' ;;
+                mpv*)      icon='' ;;
+                chromium*) icon='' ;;
+                *)         icon='ﱘ' ;;
+              esac
+              printf '%s %s (%s)' \
+                "$icon" \
+                "$(playerctl -sp "$player" metadata title)" \
+                "$(playerctl -sp "$player" metadata artist)"
+              exit 0
+            fi
+          done
+        '';
+      in [ xmonad-log pulseaudio pavucontrol playerctl mpris-meta ];
   };
 
   services.picom = {
