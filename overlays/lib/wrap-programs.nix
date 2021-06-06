@@ -1,37 +1,49 @@
-{ makeWrapper, writeShellScript, symlinkJoin, runCommandNoCCLocal, lib }:
+{ lib, makeWrapper, writeShellScript, symlinkJoin }:
+with lib;
 let
-  wrapExecutable =
-    { name, file ? null, script ? null, path ? [ ], env ? { }, flags ? "" }:
-    assert file != null || script != null
-      || abort "wrap needs 'file' or 'script' argument";
+  replaceExecutable = with lib;
+    name:
+    { # The path within the derivation which should be replaced.
+    path ? "/bin/${name}"
+    , # Derivations which should be prefixed to the executable's PATH.
+    extraPackages ? [ ]
+    , # Environment variables which should be set for the executable.
+    set ? { }
+    , # Environment variables which should be set if not already for the executable.
+    setDefault ? { }
+    , # Environment variables which should be removed from the exectuables.
+    unset ? [ ]
+    , # A derivation or script which should be run synchronously prior to the executable.
+    run ? null, # Additional flags to the executable.
+    addFlags ? [ ] }:
     let
-      pathPrefix = lib.escapeShellArg
-        (builtins.concatStringsSep ":" (map (p: "${p}/bin") path));
-      envArgs = with lib;
-        builtins.concatStringsSep " " (attrsets.mapAttrsToList
-          (k: v: "--set ${escapeShellArg k} ${escapeShellArg v}") env);
-    in runCommandNoCCLocal name {
-      inherit name;
-      f = if file == null then writeShellScript name script else file;
-      buildInputs = [ makeWrapper ];
-    } ''
-      makeWrapper "$f" "$out" --prefix PATH : ${pathPrefix} ${envArgs} ${
-        if flags != "" then "--add-flags ${lib.escapeShellArg flags}" else ""
-      }
-    '';
-in { name ? null, paths ? [ ], wrap ? { } }:
+      runArgs = if run != null then [
+        "--run"
+        (if isDerivation run then
+          "${run}/bin/${run.pname}"
+        else
+          (writeShellScript "${name}-before-script" run))
+      ] else
+        [ ];
+      pathPrefix = concatStringsSep ":" [
+        (makeBinPath extraPackages)
+        (makeSearchPathOutput "bin" "sbin" extraPackages)
+      ];
+      prefixArgs = [ "--prefix" "PATH" ":" pathPrefix ];
+      makeSetArgs = arg: attrs:
+        concatLists (mapAttrsToList (k: v: [ arg k v ]) attrs);
+      setArgs = makeSetArgs "--set" set;
+      setDefaultArgs = makeSetArgs "--set-default" setDefault;
+      unsetArgs = concatMap (x: [ "--unset" x ]) unset;
+      addFlagsArgs = [ "--add-flags" (escapeShellArgs addFlags) ];
+      wrapArgs = runArgs ++ prefixArgs ++ setArgs ++ setDefaultArgs ++ unsetArgs
+        ++ addFlagsArgs;
+    in ''wrapProgram "$out${path}" ${escapeShellArgs wrapArgs}'';
+in { package, wrap ? { } }:
 symlinkJoin {
-  name = if name == null then (builtins.head paths).name else name;
-  inherit paths;
+  inherit (package) name;
+  paths = [ package ];
   preferLocalBuild = true;
   nativeBuildInputs = [ makeWrapper ];
-  postBuild = let
-    replaceExecutable = name: args:
-      let realArgs = { inherit name; } // args;
-      in ''
-        rm "$out/bin/${realArgs.name}"
-        ln -s "${wrapExecutable realArgs}" "$out/bin/${realArgs.name}"
-      '';
-  in builtins.concatStringsSep "\n"
-  (lib.attrsets.mapAttrsToList replaceExecutable wrap);
+  postBuild = concatStringsSep "\n" (mapAttrsToList replaceExecutable wrap);
 }

@@ -51,9 +51,9 @@ let
 
 in {
   vscodium = lib.wrapPrograms {
-    paths = [ myCodium ];
+    package = myCodium;
     wrap.codium = {
-      script = ''
+      run = ''
         settings="${
           "$"
         }{XDG_CONFIG_HOME-$HOME/.config}/VSCodium/User/settings.json"
@@ -63,11 +63,11 @@ in {
           }" "$settings" \
           | ${moreutils}/bin/sponge "$settings"
         else
-          cp "${../.vscode/settings.json}" "$settings"
+          cp -L "${../.vscode/settings.json}" "$settings"
+          chmod u+w "$settings"
         fi
-        exec "${myCodium}/bin/codium" $@
       '';
-      path = [ clang-tools haskell-language-server nixfmt ];
+      extraPackages = [ clang-tools haskell-language-server nixfmt ];
     };
   };
 }

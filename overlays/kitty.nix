@@ -8,13 +8,8 @@ let
   '';
 in {
   kitty = lib.wrapPrograms {
-    name = "kitty";
-    paths = [ kitty ];
-    wrap.kitty = {
-      file = "${kitty}/bin/kitty";
-      flags =
-        "--config ${lib.escapeShellArg (writeText "kitty-config" config)}";
-    };
+    package = kitty;
+    wrap.kitty.addFlags = [ "--config" "${writeText "kitty-config" config}" ];
   };
 }
 

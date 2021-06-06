@@ -108,7 +108,8 @@ main' dbus =
           [ key "Toggle status bar gap" (modm, xK_b) $ do
               spawn "@polybar@/bin/polybar-msg cmd toggle"
               sendMessage ToggleStruts,
-            key "Logout (quit XMonad)" (modm .|. shiftMask, xK_q) $ io exitSuccess
+            key "Logout (quit XMonad)" (modm .|. shiftMask, xK_q) $ io exitSuccess,
+            key "Lock" (modm, xK_Escape) $ spawn "systemctl suspend-then-hibernate"
           ]
         ^++^ keySet
           "Audio"

@@ -24,11 +24,7 @@ let
   };
 in {
   rofi = lib.wrapPrograms {
-    name = "rofi";
-    paths = [ rofi ];
-    wrap.rofi = {
-      file = "${rofi}/bin/rofi";
-      flags = "-config ${lib.escapeShellArg config}";
-    };
+    package = rofi;
+    wrap.rofi.addFlags = [ "-config" "${config}" ];
   };
 }

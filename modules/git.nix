@@ -12,19 +12,16 @@ let
   };
   wrapGit = git: gitConfig:
     wrapPrograms {
-      paths = [ git ];
-      wrap.git = {
-        file = "${git}/bin/git";
-        env = with builtins;
-          {
-            GIT_CONFIG_COUNT = toString (length (attrNames gitConfig));
-          } // foldl' (acc: x:
-            let n = toString (length (attrNames acc) / 2);
-            in acc // {
-              "GIT_CONFIG_KEY_${n}" = x.name;
-              "GIT_CONFIG_VALUE_${n}" = toString x.value;
-            }) { } (lib.mapAttrsToList lib.nameValuePair gitConfig);
-      };
+      package = git;
+      wrap.git.set = with builtins;
+        {
+          GIT_CONFIG_COUNT = toString (length (attrNames gitConfig));
+        } // foldl' (acc: x:
+          let n = toString (length (attrNames acc) / 2);
+          in acc // {
+            "GIT_CONFIG_KEY_${n}" = x.name;
+            "GIT_CONFIG_VALUE_${n}" = toString x.value;
+          }) { } (lib.mapAttrsToList lib.nameValuePair gitConfig);
     };
 in {
   options = {
