@@ -71,6 +71,7 @@ in {
       brave
       cargo
       cargo-edit
+      discord
       gimp
       git-review
       gpsm
