@@ -69,14 +69,20 @@
   environment.variables.VK_ICD_FILENAMES =
     "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
 
-  services.xserver.xrandrHeads = [
-    {
-      output = "DisplayPort-1";
-      primary = true;
-    }
-    {
-      output = "DisplayPort-2";
-      monitorConfig = ''Option "Rotate" "right"'';
-    }
-  ];
+  services.xserver = {
+    xrandrHeads = [
+      {
+        output = "DisplayPort-1";
+        primary = true;
+      }
+      {
+        output = "DisplayPort-2";
+        monitorConfig = ''Option "Rotate" "right"'';
+      }
+    ];
+    wallpaper.live = {
+      enable = true;
+      url = "https://www.youtube.com/watch?v=Q_ax6tgU-20";
+    };
+  };
 }
