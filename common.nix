@@ -206,20 +206,13 @@ in {
       "50:class_g = 'polybar'"
     ];
     backend = "glx";
+    shadow = true;
+    shadowExclude = [ "window_type *= 'dock'" "class_g = 'Desktop'" ];
     settings = {
       no-fading-openclose = true;
-      corner-radius = 15.0;
-      rounded-corners-exclude = [
-        "_NET_WM_STATE@[0]:32a *= '_NET_WM_STATE_FULLSCREEN'"
-        "_NET_WM_STATE@[1]:32a *= '_NET_WM_STATE_FULLSCREEN'"
-        "_NET_WM_STATE@[2]:32a *= '_NET_WM_STATE_FULLSCREEN'"
-        "_NET_WM_STATE@[3]:32a *= '_NET_WM_STATE_FULLSCREEN'"
-        "_NET_WM_STATE@[4]:32a *= '_NET_WM_STATE_FULLSCREEN'"
-        "class_g = 'Polybar'"
-      ];
       blur-background-exclude = [ "class_g = 'Polybar'" ];
       blur = {
-        method = "kawase";
+        method = "dual_kawase";
         strength = 10;
         background = false;
         background-frame = false;
