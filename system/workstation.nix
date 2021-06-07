@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }: {
   virtualisation.libvirtd.enable = true;
+  virtualisation.docker.enable = true;
+  users.users.gcoakes.extraGroups = [ "libvirtd" "docker" ];
+  networking.firewall.checkReversePath = false;
 
   networking.hostName = "workstation";
 

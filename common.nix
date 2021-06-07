@@ -62,8 +62,7 @@ in {
     createHome = true;
     isNormalUser = true;
     group = "users";
-    extraGroups =
-      [ "input" "wheel" "audio" "docker" "networkmanager" "adbusers" ];
+    extraGroups = [ "input" "wheel" "audio" "networkmanager" "adbusers" ];
     openssh.authorizedKeys.keyFiles =
       [ ./ssh-laptop.pub ./ssh-workstation.pub ];
     initialPassword = "P@ssw0rd";
@@ -291,8 +290,6 @@ in {
   services.logind.lidSwitch = "suspend-then-hibernate";
 
   services.pass-secret-service.enable = true;
-
-  virtualisation.docker.enable = true;
 
   #########################
   ######## Desktop ########
