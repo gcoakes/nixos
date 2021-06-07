@@ -71,7 +71,6 @@ in {
       cargo-edit
       discord
       gimp
-      git-review
       gpsm
       hidden-shell
       ipfs
@@ -397,13 +396,14 @@ in {
         .vscode/
         .envrc
       '';
-      "core.pager" = "${pkgs.delta}/bin/delta";
-      "interactive.diffFilter" = "${pkgs.delta}/bin/delta --color-only";
+      "core.pager" = "delta";
+      "interactive.diffFilter" = "delta --color-only";
     };
     users.gcoakes.config = {
       "user.email" = "gregcoakes@gmail.com";
       "user.name" = "Gregory C. Oakes";
     };
+    extraPackages = with pkgs; [ delta git-review git-crypt ];
   };
 
   programs.zsh = {
