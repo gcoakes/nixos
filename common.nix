@@ -409,6 +409,11 @@ in {
     extraPackages = with pkgs; [ delta git-review git-crypt ];
   };
 
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   programs.zsh = {
     enable = true;
     autosuggestions.enable = true;

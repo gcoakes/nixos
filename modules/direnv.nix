@@ -1,24 +1,37 @@
 { pkgs, lib, config, ... }:
-let cfg = config.programs.direnv;
+with lib;
+let
+  cfg = config.programs.direnv;
+  wrapPrograms = pkgs.callPackage ../overlays/lib/wrap-programs.nix { };
+  wrapped = wrapPrograms {
+    inherit (cfg) package;
+    wrap.direnv.run = ''
+      if [ ! -f .envrc ] && [ -f shell.nix ]; then
+        echo use nix >> .envrc
+      fi
+    '';
+  };
 in {
   options = {
     programs.direnv = {
-      enable = lib.mkEnableOption "direnv, the environment switcher";
+      enable = mkEnableOption "direnv, the environment switcher";
 
-      package = lib.mkOption {
-        type = lib.types.package;
+      package = mkOption {
+        type = types.package;
         default = pkgs.direnv;
       };
-      enableZshIntegration = lib.mkOption {
-        type = lib.types.bool;
+
+      enableZshIntegration = mkOption {
+        type = types.bool;
         default = false;
       };
     };
   };
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    programs.zsh.shellInit = lib.mkIf cfg.enableZshIntegration ''
-      eval "$(${cfg.package}/bin/direnv hook zsh)"
+  config = mkIf cfg.enable {
+    environment.systemPackages = [ wrapped pkgs.nix-direnv ];
+    environment.pathsToLink = [ "/share/nix-direnv" ];
+    programs.zsh.shellInit = mkIf cfg.enableZshIntegration ''
+      eval "$(${wrapped}/bin/direnv hook zsh)"
     '';
   };
 }
