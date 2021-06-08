@@ -10,6 +10,12 @@
   },
   "explorer.confirmDragAndDrop": false,
   "editor.formatOnSave": true,
+  "[haskell]": {
+    "editor.tabSize": 2
+  },
+  "[literate haskell]": {
+    "editor.tabSize": 2
+  },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
