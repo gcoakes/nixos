@@ -67,9 +67,11 @@ in {
       [ ./ssh-laptop.pub ./ssh-workstation.pub ];
     initialPassword = "P@ssw0rd";
     packages = with pkgs; [
+      cabal-install
       cargo
       cargo-edit
       discord
+      ghc
       gimp
       gpsm
       hidden-shell
@@ -82,6 +84,7 @@ in {
       pavucontrol
       poetry
       qutebrowser
+      rustc
       spotify
       unzip
       vscodium
