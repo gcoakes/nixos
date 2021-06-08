@@ -2,7 +2,7 @@ inputs: final: prev:
 with prev;
 let
   config = writeText "config.py" ''
-    c.colors.webpage.darkmode.enabled = True;
+    c.colors.webpage.preferred_color_scheme = "dark"
     config.bind(",m", "spawn ${mpv}/bin/mpv {url}")
   '';
 in {
