@@ -46,6 +46,12 @@ let
           version = "1.0.0";
           sha256 = "0xykf120j27s0bmbqj8grxc79dzkh4aclgrpp1jz5kkm39400z0f";
         }
+        {
+          name = "Rewrap";
+          publisher = "stkb";
+          version = "1.13.0";
+          sha256 = "18h42vfxngix8x22nqslvnzwfvfq5kl35xs6fldi211dzwhw905j";
+        }
       ];
   };
 

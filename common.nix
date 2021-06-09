@@ -429,7 +429,6 @@ in {
       theme = "fino-time";
       plugins = [ "colored-man-pages" ];
     };
-    syntaxHighlighting.enable = true;
   };
 
   programs.fzf = {
